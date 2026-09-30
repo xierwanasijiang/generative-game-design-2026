@@ -1,0 +1,607 @@
+<title>生成式游戏设计年鉴 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<style>
+:root{
+  --ground:#f2f3ef; --surface:#fafbf8; --sunk:#e8ebe5;
+  --ink:#111416; --ink-2:#4a5156; --muted:#737b80; --rule:#d6dad3; --rule-2:#c3c8c0;
+  --accent:#3456d6; --accent-ink:#2743b3; --accent-soft:#e3e8fb;
+  --tW:#3456d6; --tS:#c7741a; --tR:#0f8f76; --tF:#8a3fb8;
+  --neutral-bar:#9aa2a6;
+  --shadow:0 1px 0 rgba(17,20,22,.04),0 12px 32px -18px rgba(17,20,22,.25);
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0e1214; --surface:#151a1d; --sunk:#1b2226;
+    --ink:#eceee9; --ink-2:#a9b1b4; --muted:#818b8f; --rule:#263034; --rule-2:#344045;
+    --accent:#7c93f7; --accent-ink:#9aabf9; --accent-soft:#1d2544;
+    --tW:#5b72ee; --tS:#c97d2a; --tR:#1c9a7d; --tF:#a064cf;
+    --neutral-bar:#5d676c;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 16px 40px -20px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0e1214; --surface:#151a1d; --sunk:#1b2226;
+  --ink:#eceee9; --ink-2:#a9b1b4; --muted:#818b8f; --rule:#263034; --rule-2:#344045;
+  --accent:#7c93f7; --accent-ink:#9aabf9; --accent-soft:#1d2544;
+  --tW:#5b72ee; --tS:#c97d2a; --tR:#1c9a7d; --tF:#a064cf;
+  --neutral-bar:#5d676c;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 16px 40px -20px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;padding-inline:clamp(16px,4vw,48px);padding-block:0 64px}
+a{color:var(--accent-ink);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* progress */
+#progress{position:fixed;left:0;right:0;top:0;height:2px;z-index:50;pointer-events:none}
+#progress i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:168px minmax(0,1fr);gap:56px}
+@media (max-width:1020px){.shell{grid-template-columns:minmax(0,1fr)}.rail{display:none}}
+
+/* chapter rail */
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 40px);align-self:start;padding-top:40px}
+.rail .brand{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);line-height:1.5;margin-bottom:28px}
+.rail .brand b{display:block;color:var(--ink);font-family:var(--serif);font-size:15px;letter-spacing:0;margin-bottom:4px}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rail a{display:grid;grid-template-columns:26px 1fr;align-items:center;gap:8px;text-decoration:none;color:var(--muted);font-size:13px;padding:6px 8px;border-radius:6px;transition:color .2s,background .2s}
+.rail a .n{font-family:var(--mono);font-size:11px}
+.rail a:hover{color:var(--ink);background:var(--sunk)}
+.rail a.on{color:var(--ink);background:var(--surface);box-shadow:inset 2px 0 0 var(--accent)}
+.rail .seedbox{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7;border-top:1px solid var(--rule);padding-top:14px}
+
+main{min-width:0}
+section{padding-block:88px 8px;scroll-margin-top:24px}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:40px;max-width:760px}
+.sec-head .eyebrow b{color:var(--accent-ink);font-weight:500}
+.sec-head h2{font-size:clamp(28px,3.4vw,40px);font-weight:900;line-height:1.2;letter-spacing:-.01em}
+.sec-head p{color:var(--ink-2);font-size:17px;max-width:62ch}
+
+/* reveal: resting state visible; JS arms only off-screen items */
+.rv{transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .8s}
+.rv.arm{transform:translateY(22px);opacity:.35}
+@media (prefers-reduced-motion:reduce){.rv,.rv.arm{transform:none!important;opacity:1!important;transition:none}}
+
+/* HERO */
+.hero{padding-block:56px 24px;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:48px;align-items:center}
+@media (max-width:1100px){.hero{grid-template-columns:minmax(0,1fr);gap:36px}}
+.hero h1{font-size:clamp(40px,5.6vw,76px);font-weight:900;line-height:1.08;letter-spacing:-.02em;margin-top:18px}
+.hero h1 em{font-style:normal;color:var(--accent-ink)}
+.hero .lede{margin-top:24px;font-size:18px;color:var(--ink-2);max-width:40ch;line-height:1.8}
+.hero .meta{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.hero .meta span::before{content:"▪ ";color:var(--accent)}
+
+.viewport{background:#0d1316;border-radius:14px;padding:12px;box-shadow:var(--shadow);color:#cfd6d4;font-family:var(--mono);font-size:11.5px;position:relative;isolation:isolate}
+.vp-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:2px 4px 10px;color:#7e8b8c;flex-wrap:wrap}
+.vp-bar .dots{display:flex;gap:6px}.vp-bar .dots i{width:8px;height:8px;border-radius:50%;background:#2a3437}
+.vp-bar b{color:#e8ecea;font-weight:500}
+#map{display:block;width:100%;height:auto;aspect-ratio:3/2;border-radius:8px;image-rendering:pixelated;cursor:crosshair;background:#11191c}
+.vp-foot{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 4px 2px}
+.vp-status{display:flex;flex-wrap:wrap;gap:6px 16px;color:#8a9798}
+.vp-status .ok{color:#6fd3a8}.vp-status .bad{color:#f09a6c}
+.prompts{display:flex;flex-wrap:wrap;gap:6px;padding:4px 4px 2px}
+.prompts button,.regen{font:inherit;color:#cfd6d4;background:#182226;border:1px solid #2a363a;border-radius:999px;padding:5px 11px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.prompts button:hover,.regen:hover{border-color:#5b72ee;color:#fff}
+.prompts button[aria-pressed="true"]{background:#23307a;border-color:#5b72ee;color:#fff}
+.regen{background:#e8ecea;color:#0d1316;border-color:#e8ecea;font-weight:600}
+.regen:hover{background:#fff;color:#0d1316}
+#hoverinfo{position:absolute;right:22px;top:52px;background:rgba(13,19,22,.86);border:1px solid #2a363a;padding:4px 8px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .15s}
+
+.kpis{margin-top:56px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{padding:20px 20px 22px 0;display:grid;gap:6px;align-content:start}
+.kpi+.kpi{padding-left:20px;border-left:1px solid var(--rule)}
+@media (max-width:760px){.kpi:nth-child(3){padding-left:0;border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}}
+.kpi .v{font-family:var(--serif);font-weight:900;font-size:clamp(34px,4vw,48px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:.5em;margin-left:2px}
+.kpi .l{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.kpi .s{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+
+/* findings */
+.findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+@media (max-width:1100px){.findings{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.findings{grid-template-columns:minmax(0,1fr)}}
+.finding{background:var(--surface);padding:28px 26px 30px;display:grid;grid-template-rows:auto auto 1fr;gap:12px;transition:background .25s}
+.finding:hover{background:var(--ground)}
+.finding .num{font-family:var(--mono);font-size:13px;color:var(--accent-ink);display:flex;justify-content:space-between;gap:12px}
+.finding .num span{color:var(--muted)}
+.finding h3{font-size:19px;line-height:1.45;font-weight:900}
+.finding p{font-size:14.5px;color:var(--ink-2);line-height:1.8}
+
+/* taxonomy */
+.tax{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:start}
+@media (max-width:980px){.tax{grid-template-columns:minmax(0,1fr)}}
+.tracks{display:grid;gap:10px}
+.track{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;padding:18px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .2s,transform .2s,box-shadow .2s}
+.track:hover,.track[aria-pressed="true"]{border-color:var(--c);box-shadow:var(--shadow)}
+.track[aria-pressed="true"]{transform:translateX(4px)}
+.track .sw{width:14px;height:14px;border-radius:3px;background:var(--c);margin-top:6px}
+.track h3{font-size:17px;font-weight:900}
+.track .en{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.track p{font-size:14px;color:var(--ink-2);margin-top:4px;line-height:1.7}
+.track .cnt{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;margin-top:4px}
+.track .ex{grid-column:2/4;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);line-height:1.7}
+.flow{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 18px 12px;overflow-x:auto}
+.flow svg{display:block;width:100%;min-width:560px;height:auto}
+.flow .cap{font-size:13px;color:var(--muted);padding:8px 4px 2px;line-height:1.7}
+.fl-node rect{fill:var(--ground);stroke:var(--rule-2);stroke-width:1}
+.fl-node text{fill:var(--ink);font-family:var(--sans);font-size:13px}
+.fl-node .sub{fill:var(--muted);font-family:var(--mono);font-size:10px}
+.fl-edge{fill:none;stroke:var(--rule-2);stroke-width:1.5}
+.fl-node.t rect{stroke:var(--c);stroke-width:1.5}
+.fl-edge.t{stroke:var(--c)}
+.flow svg.dim .t:not(.on){opacity:.18}
+.flow svg .t{transition:opacity .3s}
+.fl-loop{fill:none;stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:4 4}
+@keyframes dash{to{stroke-dashoffset:-32}}
+.fl-loop{animation:dash 2.4s linear infinite}
+@media (prefers-reduced-motion:reduce){.fl-loop{animation:none}}
+
+/* chart shells */
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px 24px 18px}
+.panel h3{font-size:18px;font-weight:900}
+.panel .sub{font-size:13px;color:var(--muted);margin-top:4px}
+.chart{margin-top:18px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.axis text,.tick text{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+.grid line{stroke:var(--rule);stroke-width:1}
+.baseline{stroke:var(--ink-2);stroke-width:1}
+.lbl{fill:var(--ink);font-family:var(--sans);font-size:12.5px}
+.lbl-2{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+.val{fill:var(--ink-2);font-family:var(--mono);font-size:11px}
+.bar{transition:opacity .25s, transform .9s cubic-bezier(.2,.7,.2,1)}
+.row-hit{fill:transparent;cursor:pointer}
+.row:hover .row-bg{fill:var(--sunk)}
+.row-bg{fill:transparent;transition:fill .15s}
+
+#tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:var(--ground);padding:10px 12px;border-radius:8px;font-size:12.5px;line-height:1.6;max-width:300px;box-shadow:var(--shadow);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}
+#tip.on{opacity:1;transform:none}
+#tip b{font-weight:700}
+#tip .m{font-family:var(--mono);font-size:11px;opacity:.75}
+
+/* world specs */
+.two{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:20px}
+@media (max-width:980px){.two{grid-template-columns:minmax(0,1fr)}}
+.tbl-wrap{overflow-x:auto}
+table.spec{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+.spec th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:0 10px 10px 0;border-bottom:1px solid var(--ink)}
+.spec td{padding:11px 10px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.spec td.m{font-family:var(--mono);font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.spec tr:hover td{background:var(--sunk)}
+.spec b{font-weight:700}
+
+/* papers */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.chip{font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;border:1px solid var(--rule-2);background:var(--surface);color:var(--ink-2);cursor:pointer;transition:all .2s}
+.chip i{width:9px;height:9px;border-radius:2px;background:var(--c,var(--ink-2))}
+.chip:hover{color:var(--ink);border-color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.controls .note{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
+#paperDetail{margin-top:14px;border-top:1px solid var(--rule);padding-top:16px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 18px;align-items:start;min-height:108px}
+#paperDetail .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
+#paperDetail h4{margin:0;font-family:var(--serif);font-size:16px;line-height:1.5}
+#paperDetail p{font-size:14px;color:var(--ink-2);grid-column:2/3}
+#paperDetail .by{font-family:var(--mono);font-size:11.5px;color:var(--muted);grid-column:2/3}
+#paperDetail .c{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1;text-align:right}
+#paperDetail .c small{display:block;font-family:var(--mono);font-weight:400;font-size:10.5px;color:var(--muted);margin-top:6px}
+.copy{font:inherit;font-family:var(--mono);font-size:11px;border:1px solid var(--rule-2);background:transparent;color:var(--ink-2);border-radius:6px;padding:3px 8px;cursor:pointer;margin-top:10px}
+.copy:hover{color:var(--ink);border-color:var(--ink-2)}
+@media (max-width:640px){#paperDetail{grid-template-columns:minmax(0,1fr)}#paperDetail p,#paperDetail .by{grid-column:auto}#paperDetail .c{text-align:left}}
+
+.found{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.found div{border:1px dashed var(--rule-2);border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.found b{font-family:var(--serif);font-size:14.5px}
+.found .m{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.found span{font-size:12.5px;color:var(--ink-2);line-height:1.6}
+
+/* timeline */
+.tl-controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.tl-year{display:grid;grid-template-columns:180px minmax(0,1fr);gap:24px;border-top:1px solid var(--ink)}
+@media (max-width:760px){.tl-year{grid-template-columns:minmax(0,1fr);gap:0}}
+.tl-year .yr{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;font-family:var(--serif);font-weight:900;font-size:clamp(44px,6vw,72px);line-height:1;padding-block:18px;letter-spacing:-.03em;color:var(--ink)}
+.tl-year .yr small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.08em;color:var(--muted);margin-top:10px}
+@media (max-width:760px){.tl-year .yr{position:static;font-size:44px}}
+.tl-list{list-style:none;margin:0;padding:0}
+.tl-item{display:grid;grid-template-columns:78px 16px minmax(0,1fr);gap:14px;padding:18px 0;border-bottom:1px solid var(--rule)}
+.tl-item .d{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:3px}
+.tl-item .k{width:10px;height:10px;margin-top:8px;border-radius:50%;border:2px solid var(--kc);background:var(--surface)}
+.tl-item[data-k="r"]{--kc:var(--tW)}.tl-item[data-k="i"]{--kc:var(--tS)}.tl-item[data-k="p"]{--kc:var(--tR)}
+.tl-item[data-k="r"] .k{background:var(--kc)}
+.tl-item[data-k="p"] .k{border-radius:2px}
+.tl-item h4{margin:0;font-size:16px;font-weight:700;line-height:1.5}
+.tl-item p{font-size:14px;color:var(--ink-2);margin-top:4px;line-height:1.75}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:10px;height:10px;border-radius:50%;border:2px solid var(--c)}
+.legend i.f{background:var(--c)}.legend i.sq{border-radius:2px}
+
+/* industry */
+.ind{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:980px){.ind{grid-template-columns:minmax(0,1fr)}}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin-bottom:20px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);padding:18px 18px 20px;display:grid;gap:4px;align-content:start}
+.tile .v{font-family:var(--serif);font-weight:900;font-size:32px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .l{font-size:13px;color:var(--ink-2);line-height:1.55}
+.events{margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:980px){.events{grid-template-columns:minmax(0,1fr)}}
+.event{border:1px solid var(--rule);border-radius:12px;padding:18px;background:var(--surface);display:grid;gap:8px;align-content:start}
+.event .when{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.event h4{margin:0;font-size:15.5px;line-height:1.5}
+.event p{font-size:13.5px;color:var(--ink-2);line-height:1.75}
+
+/* frontiers */
+.front{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--ink)}
+@media (max-width:860px){.front{grid-template-columns:minmax(0,1fr)}}
+.fr{padding:28px 28px 30px 0;border-bottom:1px solid var(--rule);display:grid;gap:10px;align-content:start}
+.fr:nth-child(even){padding-left:28px;padding-right:0;border-left:1px solid var(--rule)}
+@media (max-width:860px){.fr:nth-child(even){padding-left:0;border-left:0}}
+.fr .en{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.fr h3{font-size:22px;font-weight:900}
+.fr p{font-size:14.5px;color:var(--ink-2);line-height:1.85}
+.fr ul{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.fr li{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;background:var(--sunk);color:var(--ink-2)}
+
+/* recs */
+.recs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:980px){.recs{grid-template-columns:minmax(0,1fr)}}
+.rec{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px}
+.rec h3{font-size:19px;font-weight:900;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.rec ol{margin:14px 0 0;padding:0;list-style:none;counter-reset:r;display:grid;gap:14px}
+.rec li{counter-increment:r;display:grid;grid-template-columns:24px 1fr;gap:6px;font-size:14px;color:var(--ink-2);line-height:1.75}
+.rec li::before{content:counter(r,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--accent-ink);padding-top:3px}
+
+.sources{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;font-size:13.5px;color:var(--ink-2)}
+@media (max-width:860px){.sources{grid-template-columns:minmax(0,1fr)}}
+.sources ol{margin:0;padding-left:20px;display:grid;gap:8px}
+.sources a{word-break:break-word}
+footer{max-width:1240px;margin:72px auto 0;padding-top:20px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+</style>
+
+<div id="progress"><i></i></div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="章节导航">
+    <div class="brand"><b>生成式游戏设计年鉴</b>2024 — 2026<br>LLM · PCG · WORLD MODELS</div>
+    <ol id="railList"></ol>
+    <div class="seedbox">检索日 2026-09-27<br>论文 28 篇 · 事件 33 条<br>引用源 Semantic Scholar</div>
+  </aside>
+
+  <main>
+    <!-- HERO -->
+    <header class="hero" id="top">
+      <div>
+        <div class="eyebrow">Annual Review · Generative Game Design · 2024–2026</div>
+        <h1>当关卡学会<em>自己生长</em></h1>
+        <p class="lede">LLM 驱动的生成式游戏设计，三年里从“让模型写一张马里奥关卡”走到“让模型直接成为引擎”。这份年鉴汇总全球研究与产业进展，并按引用量梳理了这个领域真正被引用的工作。</p>
+        <div class="meta"><span>28 篇核心论文</span><span>33 个里程碑</span><span>GDC 2026 行业数据</span></div>
+      </div>
+
+      <figure class="viewport" style="margin:0" aria-label="程序化关卡生成演示">
+        <div class="vp-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div>seed <b id="seedOut">0x7E3A</b> · 48×32 tiles · <span id="biomeOut">温带群岛</span></div>
+        </div>
+        <canvas id="map" width="480" height="320"></canvas>
+        <div id="hoverinfo">(0,0) grass</div>
+        <div class="prompts" role="group" aria-label="生成提示">
+          <button type="button" data-b="0" aria-pressed="true">“温带群岛”</button>
+          <button type="button" data-b="1">“被潮汐淹没的神殿”</button>
+          <button type="button" data-b="2">“沙海遗迹”</button>
+          <button type="button" data-b="3">“冰原与火山”</button>
+        </div>
+        <div class="vp-foot">
+          <div class="vp-status" id="vpStatus"><span>生成 → 验证</span></div>
+          <button type="button" class="regen" id="regen">重新生成 ↻</button>
+        </div>
+      </figure>
+    </header>
+
+    <div class="kpis rv" aria-label="关键数字">
+      <div class="kpi"><div class="v">52<small>%</small></div><div class="l">受访者所在公司已在使用生成式 AI</div><div class="s">GDC 2026 · n&gt;2,300</div></div>
+      <div class="kpi"><div class="v">52<small>%</small></div><div class="l">认为生成式 AI 对行业有负面影响（2024 年为 18%）</div><div class="s">GDC 2026</div></div>
+      <div class="kpi"><div class="v">10<small>%</small></div><div class="l">使用者把它用于程序化生成；面向玩家的功能仅 5%</div><div class="s">GDC 2026</div></div>
+      <div class="kpi"><div class="v">829</div><div class="l">Genie 的引用数，是本领域引用最高的“可玩世界模型”论文</div><div class="s">Semantic Scholar · 2026-09</div></div>
+    </div>
+
+    <section id="s1" data-title="核心结论">
+      <div class="sec-head rv"><div class="eyebrow"><b>01</b> · Key findings</div><h2>六个判断</h2><p>把三年的论文、产品与行业调查放在一起看，这是最值得记住的六件事。</p></div>
+      <div class="findings" id="findings"></div>
+    </section>
+
+    <section id="s2" data-title="技术谱系">
+      <div class="sec-head rv"><div class="eyebrow"><b>02</b> · Taxonomy</div><h2>四条技术路线</h2><p>“生成式游戏设计”不是一种技术，而是四条互相借力的路线。点选任一路线，右侧管线会标出它在生成循环中的位置。</p></div>
+      <div class="tax">
+        <div class="tracks" id="tracks" role="group" aria-label="技术路线"></div>
+        <div class="flow rv">
+          <svg id="flow" viewBox="0 0 700 390" role="img" aria-label="生成式游戏设计管线示意图"></svg>
+          <div class="cap">虚线为 2026 年研究重点：把引擎校验与自动试玩的结果回灌到生成端，形成“生成 → 验证 → 修正”的闭环。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3" data-title="世界模型演进">
+      <div class="sec-head rv"><div class="eyebrow"><b>03</b> · Neural engines</div><h2>从 1 帧到 24 帧：模型即引擎</h2><p>神经世界模型逐帧预测“按下这个键之后会看到什么”。下表只列厂商或论文公开给出的数字；未公开的指标保留为空。</p></div>
+      <div class="two">
+        <div class="panel rv">
+          <h3>实时帧率</h3>
+          <div class="sub">单位 fps · 仅含公开数字的系统</div>
+          <div class="chart" id="fpsChart"></div>
+        </div>
+        <div class="panel rv">
+          <h3>规格台账</h3>
+          <div class="sub">分辨率与一致性时长决定了“能不能玩”</div>
+          <div class="tbl-wrap" style="margin-top:14px"><table class="spec" id="specTable"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4" data-title="高引用论文">
+      <div class="sec-head rv"><div class="eyebrow"><b>04</b> · Most-cited papers</div><h2>谁被引用最多</h2><p>2024 年以来首次发布、与生成式游戏设计直接相关或紧邻的论文，按 Semantic Scholar 引用数排序。点击任一行查看摘要。标“相邻”的工作来自 3D 资产或物理 AI 领域，但被游戏研究大量引用。</p></div>
+      <div class="panel rv">
+        <div class="controls" id="paperFilters" role="group" aria-label="按路线筛选"></div>
+        <div class="chart" id="paperChart"></div>
+        <div id="paperDetail" aria-live="polite"></div>
+      </div>
+      <h3 class="rv" style="font-size:17px;margin-top:40px">奠基工作 · 2023</h3>
+      <p class="rv" style="font-size:14px;color:var(--ink-2);margin-top:6px">不在 2024–2026 的统计窗口内，但几乎所有后续工作都会引用它们。</p>
+      <div class="found" id="found"></div>
+    </section>
+
+    <section id="s5" data-title="时间线">
+      <div class="sec-head rv"><div class="eyebrow"><b>05</b> · Timeline</div><h2>33 个月，33 个节点</h2><p>研究突破、产品发布与规则变化交替推进。可按类型筛选。</p></div>
+      <div class="tl-controls" id="tlFilters" role="group" aria-label="时间线筛选"></div>
+      <div id="timeline"></div>
+    </section>
+
+    <section id="s6" data-title="产业脉搏">
+      <div class="sec-head rv"><div class="eyebrow"><b>06</b> · Industry pulse</div><h2>用的人更多了，喜欢的人更少了</h2><p>GDC《2026 State of the Game Industry》调查了超过 2,300 名从业者。生成式 AI 正在进入工作流，但主要集中在“看不见”的环节。</p></div>
+      <div class="tiles rv">
+        <div class="tile"><div class="v">36%</div><div class="l">从业者本人在工作中使用</div></div>
+        <div class="tile"><div class="v">78%</div><div class="l">所在公司已有 AI 使用政策</div></div>
+        <div class="tile"><div class="v">58% / 30%</div><div class="l">发行、营销岗 vs 游戏工作室的使用率</div></div>
+        <div class="tile"><div class="v">~20%</div><div class="l">2025 年 Steam 新作带 AI 披露（AI and Games 统计）</div></div>
+      </div>
+      <div class="ind">
+        <div class="panel rv"><h3>对行业影响的看法</h3><div class="sub">受访者占比 · 2024–2026</div><div class="chart" id="sentChart"></div></div>
+        <div class="panel rv"><h3>生成式 AI 用在哪里</h3><div class="sub">使用者中的占比，可多选 · 2026</div><div class="chart" id="useChart"></div></div>
+      </div>
+      <div class="events">
+        <div class="event rv"><div class="when">2025-12 · 评奖</div><h4>《光与影：33 号远征队》被撤销独立游戏奖</h4><p>首发版本含生成式 AI 制作的占位纹理（发售五天后已移除），Indie Game Awards 仍收回“年度独立游戏”与“最佳独立首作”。</p></div>
+        <div class="event rv"><div class="when">2025-10 → 2026-03 · 配音</div><h4>ARC Raiders 回炉重录 AI 语音</h4><p>TTS 语音在评测中被批评。Embark CEO 在 2026 年 3 月表示，部分 AI 语音已用真人演员重新录制，理由是质量差距明显。</p></div>
+        <div class="event rv"><div class="when">2026-01 · 资本市场</div><h4>Project Genie 上线，游戏股承压</h4><p>Genie 3 以网页原型向美国 AI Ultra 订阅者开放，单次探索限 60 秒。发布后多家游戏公司股价下跌，市场开始为“提示即世界”定价。</p></div>
+      </div>
+    </section>
+
+    <section id="s7" data-title="2026 前沿">
+      <div class="sec-head rv"><div class="eyebrow"><b>07</b> · Research frontier 2026</div><h2>2026：从“能生成”到“能验证”</h2><p>对 2026 年 arXiv 新论文的梳理显示，研究重心已经从生成质量转向规则正确、长时一致与自动评测。</p></div>
+      <div class="front" id="front"></div>
+    </section>
+
+    <section id="s8" data-title="行动建议">
+      <div class="sec-head rv"><div class="eyebrow"><b>08</b> · Recommendations</div><h2>给三类读者的建议</h2></div>
+      <div class="recs" id="recs"></div>
+    </section>
+
+    <section id="s9" data-title="方法与来源">
+      <div class="sec-head rv"><div class="eyebrow"><b>09</b> · Method &amp; sources</div><h2>方法与来源</h2></div>
+      <div class="sources rv">
+        <div>
+          <p><b>检索范围。</b>2024-01 至 2026-09，全球英文学术文献与产业公开信息。论文候选来自领域综述的参考文献、arXiv 关键词检索（procedural content generation、game world model、LLM game generation 等）与主要实验室发布。</p>
+          <p style="margin-top:12px"><b>引用数。</b>来自 Semantic Scholar Graph API，统一于 2026-09-27 批量检索。不同数据库口径不同（Google Scholar 通常更高），因此只宜做相对比较。“2024–2026”按 arXiv 首次公开年份划分。</p>
+          <p style="margin-top:12px"><b>产业数据。</b>采用厂商官方发布与 GDC 年度调查原文；二手报道仅用于事件定位，数字以一手来源为准。</p>
+        </div>
+        <ol id="srcList"></ol>
+      </div>
+    </section>
+  </main>
+</div>
+<footer><span>生成式游戏设计年鉴 · 2024–2026</span><span>数据截至 2026-09-27</span></footer>
+
+<script>/*@DATA*/</script>
+<script>
+(function(){
+const G=window.GP, $=s=>document.querySelector(s), NS="http://www.w3.org/2000/svg";
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const el=(tag,attrs={},parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e};
+const h=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tc=k=>`var(--t${k})`;
+
+/* ---------- tooltip ---------- */
+const tip=$("#tip");
+function showTip(html,ev){tip.innerHTML=html;tip.classList.add("on");moveTip(ev)}
+function moveTip(ev){const w=tip.offsetWidth,hh=tip.offsetHeight;let x=ev.clientX+14,y=ev.clientY+14;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+hh>innerHeight-8)y=ev.clientY-hh-14;tip.style.left=x+"px";tip.style.top=y+"px"}
+function hideTip(){tip.classList.remove("on")}
+
+/* ---------- rail + progress ---------- */
+const secs=[...document.querySelectorAll("main section")];
+const rail=$("#railList");
+secs.forEach((s,i)=>{const li=h("li");li.innerHTML=`<a href="#${s.id}"><span class="n">${String(i+1).padStart(2,"0")}</span>${s.dataset.title}</a>`;rail.appendChild(li)});
+const links=[...rail.querySelectorAll("a")];
+const bar=$("#progress i");
+function onScroll(){const d=document.documentElement;const p=d.scrollTop/(d.scrollHeight-d.clientHeight||1);bar.style.transform=`scaleX(${p})`;
+  let cur=-1;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*.35)cur=i});links.forEach((a,i)=>a.classList.toggle("on",i===cur))}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+/* ---------- reveal (only arms off-screen items) ---------- */
+function armReveal(root=document){
+  if(reduce||!("IntersectionObserver"in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("arm");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"});
+  root.querySelectorAll(".rv").forEach(n=>{if(n.getBoundingClientRect().top>innerHeight){n.classList.add("arm");io.observe(n)}});
+}
+
+/* ---------- HERO: procedural map, generate → verify ---------- */
+const cv=$("#map"),cx=cv.getContext("2d"),W=48,H=32,S=10;
+const BIOMES=[
+  {name:"温带群岛",sea:.47,c:["#18306e","#2b4fb8","#d9b36a","#4f9e62","#2a6f4b","#6b7478","#e9ece8"],moist:0},
+  {name:"被潮汐淹没的神殿",sea:.58,c:["#10245a","#2447a8","#c9a55c","#3f8f78","#1f5f52","#5b6770","#d8dee0"],moist:.1},
+  {name:"沙海遗迹",sea:.28,c:["#1c3570","#2f5fb3","#e6c27a","#d39a4a","#9f6a32","#7a6250","#f0e2c4"],moist:-.3},
+  {name:"冰原与火山",sea:.40,c:["#16305f","#3a64b0","#9fb4c4","#c9d6de","#6d7f8c","#3b3336","#c7492f"],moist:0}
+];
+let biome=0,seed=0x7E3A,grid=[],pois=[],path=[],tries=0,anim=0;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function noiseField(r,scale){const gw=Math.ceil(W/scale)+2,gh=Math.ceil(H/scale)+2,g=[];for(let i=0;i<gw*gh;i++)g.push(r());
+  const sm=t=>t*t*(3-2*t);return(x,y)=>{const fx=x/scale,fy=y/scale,x0=Math.floor(fx),y0=Math.floor(fy),tx=sm(fx-x0),ty=sm(fy-y0);const v=(i,j)=>g[j*gw+i];
+  return (v(x0,y0)*(1-tx)+v(x0+1,y0)*tx)*(1-ty)+(v(x0,y0+1)*(1-tx)+v(x0+1,y0+1)*tx)*ty}}
+function generate(sd){const r=rng(sd),n1=noiseField(r,9),n2=noiseField(r,4),n3=noiseField(r,2),m=noiseField(r,7),B=BIOMES[biome];grid=[];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const dx=(x-W/2)/(W/2),dy=(y-H/2)/(H/2);let e=n1(x,y)*.62+n2(x,y)*.28+n3(x,y)*.1;e=e-.34*(dx*dx+dy*dy)+.1;const mo=m(x,y)+B.moist;
+    let t;if(e<B.sea-.1)t=0;else if(e<B.sea)t=1;else if(e<B.sea+.04)t=2;else if(e<B.sea+.19)t=mo>.5?4:3;else if(e<B.sea+.33)t=5;else t=6;
+    if(biome===3&&t===6&&r()<.5)t=6;grid.push(t)}
+  // place POIs on land
+  pois=[];let guard=0;while(pois.length<3&&guard++<400){const x=2+Math.floor(r()*(W-4)),y=2+Math.floor(r()*(H-4)),t=grid[y*W+x];if(t>=2&&t<=4&&pois.every(p=>Math.abs(p.x-x)+Math.abs(p.y-y)>14))pois.push({x,y})}}
+function bfs(a,b){const walk=t=>t>=2&&t<=5,prev=new Int32Array(W*H).fill(-1),q=[a.y*W+a.x];prev[q[0]]=q[0];
+  while(q.length){const c=q.shift();if(c===b.y*W+b.x)break;const x=c%W,y=(c/W)|0;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const ni=ny*W+nx;if(prev[ni]<0&&walk(grid[ni])){prev[ni]=c;q.push(ni)}}}
+  const end=b.y*W+b.x;if(prev[end]<0)return null;const p=[];let c=end;while(c!==prev[c]){p.push(c);c=prev[c]}p.push(c);return p.reverse()}
+function verify(){if(pois.length<3)return false;const p1=bfs(pois[0],pois[1]),p2=bfs(pois[1],pois[2]);if(!p1||!p2)return false;path=p1.concat(p2);return true}
+function draw(progress=1){const B=BIOMES[biome];cx.clearRect(0,0,cv.width,cv.height);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const d=(x+y)/(W+H);if(d>progress)continue;const t=grid[y*W+x];cx.fillStyle=B.c[t];cx.fillRect(x*S,y*S,S,S);
+    if(t===4&&((x*7+y*3)%4===0)){cx.fillStyle="rgba(0,0,0,.18)";cx.fillRect(x*S+3,y*S+3,4,4)}
+    if(t===5&&((x*5+y*11)%5===0)){cx.fillStyle="rgba(255,255,255,.14)";cx.fillRect(x*S+2,y*S+2,6,2)}}
+  cx.strokeStyle="rgba(255,255,255,.035)";cx.lineWidth=1;for(let x=0;x<=W;x++){cx.beginPath();cx.moveTo(x*S+.5,0);cx.lineTo(x*S+.5,H*S);cx.stroke()}for(let y=0;y<=H;y++){cx.beginPath();cx.moveTo(0,y*S+.5);cx.lineTo(W*S,y*S+.5);cx.stroke()}
+  if(progress>=1){const pk=Math.min(path.length,Math.floor(path.length*pathP));cx.fillStyle="#fff";for(let i=0;i<pk;i+=2){const c=path[i];cx.globalAlpha=.85;cx.fillRect((c%W)*S+4,((c/W)|0)*S+4,2,2)}cx.globalAlpha=1;
+    pois.forEach((p,i)=>{cx.fillStyle="#0d1316";cx.fillRect(p.x*S-3,p.y*S-3,S+6,S+6);cx.fillStyle=["#f4f1e8","#ffcf5a","#ff7a59"][i];cx.fillRect(p.x*S-1,p.y*S-1,S+2,S+2);cx.fillStyle="#0d1316";cx.font="600 9px IBM Plex Mono, monospace";cx.fillText(["S","K","B"][i],p.x*S+2,p.y*S+8)})}}
+let pathP=1;
+function run(newSeed){cancelAnimationFrame(anim);tries=0;let sd=newSeed;
+  do{generate(sd);tries++;if(verify())break;sd=(sd*1103515245+12345)>>>0&0xFFFF}while(tries<40);seed=sd;
+  $("#seedOut").textContent="0x"+seed.toString(16).toUpperCase().padStart(4,"0");$("#biomeOut").textContent=BIOMES[biome].name;
+  const ok=path.length>0;$("#vpStatus").innerHTML=`<span>尝试 ${tries} 次</span><span class="${ok?"ok":"bad"}">${ok?"✓ 可达性通过":"✗ 未通过"}</span><span>路径 ${path.length} 格</span><span>起点 S → 钥匙 K → Boss B</span>`;
+  if(reduce){pathP=1;draw(1);return}
+  const t0=performance.now();pathP=0;
+  const step=now=>{const k=Math.min(1,(now-t0)/700);if(k<1){draw(k*1.02);anim=requestAnimationFrame(step)}else{const k2=Math.min(1,(now-t0-700)/600);pathP=Math.max(0,k2);draw(1);if(k2<1)anim=requestAnimationFrame(step)}};anim=requestAnimationFrame(step)}
+$("#regen").addEventListener("click",()=>run((Math.random()*0xFFFF)|0));
+document.querySelectorAll(".prompts button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".prompts button").forEach(x=>x.setAttribute("aria-pressed",x===b));biome=+b.dataset.b;run([0x7E3A,0x1D05,0x5A11,0x2C77][biome])}));
+const TN=["深海","浅水","沙滩","平原","森林","岩地","雪 / 熔岩"],hi=$("#hoverinfo");
+cv.addEventListener("mousemove",e=>{const r=cv.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)/r.width*W),y=Math.floor((e.clientY-r.top)/r.height*H);if(x<0||y<0||x>=W||y>=H)return;hi.textContent=`(${x},${y}) ${TN[grid[y*W+x]]}`;hi.style.opacity=1});
+cv.addEventListener("mouseleave",()=>hi.style.opacity=0);
+run(seed);
+
+/* ---------- findings ---------- */
+G.findings.forEach((f,i)=>{const d=h("article","finding rv",`<div class="num">${esc(f.n)}<span>${String(i+1).padStart(2,"0")}</span></div><h3>${esc(f.h)}</h3><p>${esc(f.x)}</p>`);$("#findings").appendChild(d)});
+
+/* ---------- tracks + flow ---------- */
+const counts={};G.papers.forEach(p=>counts[p.k]=(counts[p.k]||0)+1);
+const examples={W:"Genie · GameNGen · Matrix-Game · Genie 3",S:"WonderWorld · SceneCraft · Word2World · MAGIC",R:"GAVEL · ScriptDoctor · AutoUE · GameGen-Verifier",F:"TRELLIS · Hunyuan3D · SIMA · BALROG"};
+let activeTrack=null;
+Object.entries(G.tracks).forEach(([k,t])=>{const b=h("button","track rv");b.type="button";b.style.setProperty("--c",tc(k));b.setAttribute("aria-pressed","false");b.dataset.k=k;
+  b.innerHTML=`<span class="sw"></span><div><h3>${t.name}</h3><div class="en">${t.en}</div><p>${t.desc}</p></div><span class="cnt">${counts[k]||0} 篇</span><div class="ex">${examples[k]}</div>`;
+  b.addEventListener("click",()=>{activeTrack=activeTrack===k?null:k;document.querySelectorAll(".track").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===activeTrack));paintFlow()});
+  b.addEventListener("mouseenter",()=>{if(!activeTrack)paintFlow(k)});b.addEventListener("mouseleave",()=>{if(!activeTrack)paintFlow()});
+  $("#tracks").appendChild(b)});
+const fs=$("#flow");
+function node(x,y,w,hh,label,sub,k){const g=el("g",{class:"fl-node"+(k?" t":"") },fs);if(k){g.style.setProperty("--c",tc(k));g.dataset.k=k}
+  el("rect",{x,y,width:w,height:hh,rx:9},g);const t=el("text",{x:x+14,y:y+(sub?24:hh/2+5)},g);t.textContent=label;if(sub){const s=el("text",{x:x+14,y:y+42,class:"sub"},g);s.textContent=sub}return g}
+function edge(d,k){const p=el("path",{d,class:"fl-edge"+(k?" t":""),"marker-end":"url(#ah)"},fs);if(k){p.style.setProperty("--c",tc(k));p.dataset.k=k}return p}
+const defs=el("defs",{},fs),mk=el("marker",{id:"ah",viewBox:"0 0 8 8",refX:"7",refY:"4",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"},defs);el("path",{d:"M0,0 L8,4 L0,8 z",fill:"var(--muted)"},mk);
+node(8,160,120,60,"设计意图","prompt · 草图");
+node(166,160,132,60,"LLM 规划层","IR · DSL · 工具调用");
+node(346,14,176,56,"规则与代码合成","VGDL · Ludii · C# · 蓝图","R");
+node(346,100,176,56,"内容与场景生成","关卡 · 叙事 · 3D 场景","S");
+node(346,186,176,56,"资产基座","TRELLIS · Hunyuan3D","F");
+node(346,272,176,56,"神经世界模型","动作 → 下一帧","W");
+node(572,160,112,60,"引擎 / 试玩","校验 · 可达性");
+node(572,300,112,56,"玩家","体验 · 反馈");
+edge("M128,190 L162,190");
+[["R",42],["S",128],["F",214],["W",300]].forEach(([k,y])=>{edge(`M298,190 C322,190 322,${y} 342,${y}`,k);edge(`M522,${y} C548,${y} 548,190 568,190`,k)});
+edge("M628,220 L628,296");
+el("path",{d:"M600,220 C600,380 232,380 232,224",class:"fl-loop","marker-end":"url(#ah)"},fs);
+const lt=el("text",{x:416,y:372,"text-anchor":"middle",class:"lbl-2"},fs);lt.textContent="验证结果回灌 · generate → verify → repair";
+function paintFlow(k=activeTrack){fs.classList.toggle("dim",!!k);fs.querySelectorAll(".t").forEach(n=>n.classList.toggle("on",n.dataset.k===k))}
+
+/* ---------- FPS chart (single series) ---------- */
+(function(){const data=G.worldspecs.filter(d=>d.fps),box=$("#fpsChart");const w=520,rowH=40,top=10,left=108,right=40,hh=top+data.length*rowH+30;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"世界模型实时帧率条形图"},box);const x=v=>left+(w-left-right)*v/24;
+  const g=el("g",{class:"grid"},svg);[0,6,12,18,24].forEach(v=>{el("line",{x1:x(v),x2:x(v),y1:top-4,y2:top+data.length*rowH},g);const t=el("text",{x:x(v),y:hh-8,"text-anchor":"middle",class:"lbl-2"},svg);t.textContent=v});
+  data.forEach((d,i)=>{const y=top+i*rowH,gr=el("g",{class:"row"},svg);el("rect",{x:0,y:y,width:w,height:rowH,class:"row-bg",rx:6},gr);
+    const l=el("text",{x:0,y:y+18,class:"lbl"},gr);l.textContent=d.m;const l2=el("text",{x:0,y:y+32,class:"lbl-2"},gr);l2.textContent=d.d;
+    const bw=x(d.fps)-left;const b=el("path",{d:roundBar(left,y+14,bw,12),fill:d.m.startsWith("Genie")?"var(--tW)":"var(--neutral-bar)",class:"bar"},gr);b.style.transformOrigin=`${left}px 0`;
+    const v=el("text",{x:left+bw+8,y:y+24,class:"val"},gr);v.textContent=d.fps+" fps";
+    el("rect",{x:0,y:y,width:w,height:rowH,class:"row-hit"},gr);
+    gr.addEventListener("mousemove",e=>showTip(`<b>${d.m}</b> · ${d.org}<br>${d.fps} fps · ${d.res}<br><span class="m">${d.note}</span>`,e));gr.addEventListener("mouseleave",hideTip);growOnView(b)});
+  const cap=h("div","",`<span style="font-size:12.5px;color:var(--muted)">蓝色为 Google DeepMind Genie 系列；灰色为其他团队。GameNGen 与 Genie 3 之间的差距不只在帧率，更在分辨率与一致时长。</span>`);box.appendChild(cap)})();
+function roundBar(x,y,w,hh){const r=Math.min(4,w/2);return `M${x},${y} H${x+w-r} Q${x+w},${y} ${x+w},${y+r} V${y+hh-r} Q${x+w},${y+hh} ${x+w-r},${y+hh} H${x} Z`}
+function growOnView(b){if(reduce||!("IntersectionObserver"in window))return;if(b.getBoundingClientRect().top<innerHeight)return;b.style.transform="scaleX(0)";const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){b.style.transform="scaleX(1)";io.disconnect()}}),{rootMargin:"0px 0px -10% 0px"});io.observe(b)}
+
+/* spec table */
+$("#specTable").innerHTML=`<thead><tr><th>模型</th><th>时间</th><th>分辨率</th><th>帧率</th><th>一致时长</th></tr></thead><tbody>${G.worldspecs.map(d=>`<tr><td><b>${d.m}</b><br><span style="font-size:12px;color:var(--muted)">${d.org}</span></td><td class="m">${d.d}</td><td class="m">${d.res}</td><td class="m">${d.fps?d.fps+" fps":"实时 · 未公开"}</td><td>${d.horizon}</td></tr>`).join("")}</tbody>`;
+
+/* ---------- papers chart ---------- */
+let pf="all";const filt=$("#paperFilters");
+[["all","全部",null],...Object.entries(G.tracks).map(([k,t])=>[k,t.name,k])].forEach(([k,label,c])=>{const b=h("button","chip",`${c?"<i></i>":""}${label}`);b.type="button";if(c)b.style.setProperty("--c",tc(c));b.setAttribute("aria-pressed",k===pf);
+  b.addEventListener("click",()=>{pf=k;filt.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));drawPapers()});filt.appendChild(b)});
+filt.appendChild(h("span","note","单位：引用数"));
+let selected=G.papers[2].id,touched=false;
+function drawPapers(){const box=$("#paperChart");box.innerHTML="";const data=G.papers.filter(p=>pf==="all"||p.k===pf).sort((a,b)=>b.c-a.c);
+  const w=900,rowH=26,top=6,left=176,right=64,hh=top+data.length*rowH+28,max=1000;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"论文引用数条形图"},box);const x=v=>left+(w-left-right)*v/max;
+  const g=el("g",{class:"grid"},svg);[0,250,500,750,1000].forEach(v=>{el("line",{x1:x(v),x2:x(v),y1:top,y2:top+data.length*rowH},g);const t=el("text",{x:x(v),y:hh-8,"text-anchor":"middle",class:"lbl-2"},svg);t.textContent=v});
+  data.forEach((p,i)=>{const y=top+i*rowH,gr=el("g",{class:"row"},svg);el("rect",{x:0,y,width:w,height:rowH,class:"row-bg",rx:5},gr);
+    const l=el("text",{x:left-12,y:y+17,"text-anchor":"end",class:"lbl"},gr);l.textContent=p.s;if(p.id===selected){l.setAttribute("font-weight","700")}
+    const bw=Math.max(2,x(p.c)-left);const b=el("path",{d:roundBar(left,y+8,bw,10),fill:tc(p.k),class:"bar"},gr);b.style.transformOrigin=`${left}px 0`;if(touched&&p.id!==selected)b.style.opacity=.6;
+    const v=el("text",{x:left+bw+8,y:y+17,class:"val"},gr);v.textContent=p.c+(p.adj?"  · 相邻":"");
+    el("rect",{x:0,y,width:w,height:rowH,class:"row-hit"},gr);
+    gr.addEventListener("mousemove",e=>showTip(`<b>${esc(p.s)}</b> · ${p.c} 次引用<br><span class="m">${esc(p.a)} · ${esc(p.v)} · ${p.y}</span>`,e));gr.addEventListener("mouseleave",hideTip);
+    gr.addEventListener("click",()=>{selected=p.id;touched=true;drawPapers();showDetail(p)});growOnView(b)});
+  const cur=G.papers.find(p=>p.id===selected);if(cur)showDetail(cur)}
+function showDetail(p){const link=p.id.includes(".")?`https://arxiv.org/abs/${p.id}`:`https://doi.org/10.1038/${p.id}`;
+  $("#paperDetail").innerHTML=`<span class="tag" style="box-shadow:inset 3px 0 0 ${tc(p.k)}">${G.tracks[p.k].name}</span><div><h4>${esc(p.t)}</h4></div><div class="c">${p.c}<small>引用 · S2</small></div><span></span><div class="by">${esc(p.a)} · ${esc(p.org)} · ${esc(p.v)} · <a href="${link}" target="_blank" rel="noopener">${p.id.includes(".")?"arXiv:"+p.id:"Nature"}</a></div><span></span><span></span><p>${esc(p.n)}<br><button class="copy" type="button" id="copyCite">复制引用</button></p>`;
+  $("#copyCite").addEventListener("click",e=>{const txt=`${p.a} (${p.y}). ${p.t}. ${p.v}. ${link}`;const btn=e.currentTarget;
+    const done=()=>{btn.textContent="已复制";setTimeout(()=>btn.textContent="复制引用",1600)};
+    try{navigator.clipboard.writeText(txt).then(done,()=>{sel(btn,txt)})}catch(_){sel(btn,txt)}})}
+function sel(btn,txt){const s=document.createElement("span");s.textContent=" "+txt;s.style.fontSize="12px";btn.after(s);const r=document.createRange();r.selectNodeContents(s);const g=getSelection();g.removeAllRanges();g.addRange(r);btn.textContent="已选中，按 Ctrl+C"}
+drawPapers();
+G.foundations.forEach(f=>$("#found").appendChild(h("div","rv",`<b>${esc(f.s)}</b><span class="m">${esc(f.a)} · ${esc(f.v)} · ${f.c.toLocaleString()} 引用</span><span>${esc(f.n)}</span>`)));
+
+/* ---------- timeline ---------- */
+const KN={r:"研究",i:"产业",p:"政策与劳工"};let tk="all";const tf=$("#tlFilters");
+[["all","全部"],["r","研究"],["i","产业"],["p","政策与劳工"]].forEach(([k,l])=>{const b=h("button","chip",(k!=="all"?`<i style="border-radius:${k==="p"?"2px":"50%"}"></i>`:"")+l);b.type="button";if(k!=="all")b.style.setProperty("--c",tc({r:"W",i:"S",p:"R"}[k]));b.setAttribute("aria-pressed",k===tk);
+  b.addEventListener("click",()=>{tk=k;tf.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));document.querySelectorAll(".tl-item").forEach(it=>it.hidden=!(tk==="all"||it.dataset.k===tk));document.querySelectorAll(".tl-year").forEach(y=>{const n=[...y.querySelectorAll(".tl-item")].filter(i=>!i.hidden).length;y.querySelector(".cnt").textContent=n+" 条"})});tf.appendChild(b)});
+const years={};G.timeline.forEach(e=>{(years[e.d.slice(0,4)]=years[e.d.slice(0,4)]||[]).push(e)});
+const yrLede={"2024":"证明可行","2025":"走向实时","2026":"开始验证"};
+Object.entries(years).forEach(([y,list])=>{const blk=h("div","tl-year");blk.innerHTML=`<div class="yr">${y}<small>${yrLede[y]} · <span class="cnt">${list.length} 条</span></small></div>`;const ul=h("ul","tl-list");
+  list.forEach(e=>{const li=h("li","tl-item rv");li.dataset.k=e.k;li.innerHTML=`<div class="d">${e.d}</div><span class="k" title="${KN[e.k]}"></span><div><h4>${esc(e.t)}</h4><p>${esc(e.x)}</p></div>`;ul.appendChild(li)});blk.appendChild(ul);$("#timeline").appendChild(blk)});
+
+/* ---------- sentiment slope chart ---------- */
+(function(){const S=G.sentiment,box=$("#sentChart"),w=480,hh=300,l=40,r=96,t=16,b=34;const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"对生成式AI影响看法的折线图"},box);
+  const x=i=>l+(w-l-r)*i/2,y=v=>t+(hh-t-b)*(1-v/60);const g=el("g",{class:"grid"},svg);[0,20,40,60].forEach(v=>{el("line",{x1:l,x2:w-r+10,y1:y(v),y2:y(v)},g);const tx=el("text",{x:l-8,y:y(v)+4,"text-anchor":"end",class:"lbl-2"},svg);tx.textContent=v+"%"});
+  S.years.forEach((yr,i)=>{const tx=el("text",{x:x(i),y:hh-10,"text-anchor":"middle",class:"lbl-2"},svg);tx.textContent=yr});
+  const series=[{k:"negative",name:"负面",c:"var(--tS)"},{k:"positive",name:"正面",c:"var(--tW)"}];
+  series.forEach(s=>{const pts=S[s.k].map((v,i)=>[x(i),y(v)]);el("path",{d:"M"+pts.map(p=>p.join(",")).join(" L"),fill:"none",stroke:s.c,"stroke-width":2,"stroke-linejoin":"round"},svg);
+    pts.forEach((p,i)=>el("circle",{cx:p[0],cy:p[1],r:4.5,fill:s.c,stroke:"var(--surface)","stroke-width":2},svg));
+    const last=pts[2],tx=el("text",{x:last[0]+12,y:last[1]+4,class:"lbl"},svg);tx.textContent=`${s.name} ${S[s.k][2]}%`});
+  const cross=el("line",{y1:t,y2:hh-b,stroke:"var(--ink-2)","stroke-width":1,"stroke-dasharray":"3 3",opacity:0},svg);
+  S.years.forEach((yr,i)=>{const hit=el("rect",{x:x(i)-40,y:t,width:80,height:hh-t-b,fill:"transparent"},svg);
+    hit.addEventListener("mousemove",e=>{cross.setAttribute("x1",x(i));cross.setAttribute("x2",x(i));cross.setAttribute("opacity",1);showTip(`<b>${yr}</b><br>负面 ${S.negative[i]}% · 正面 ${S.positive[i]}%${i===1?`<br><span class="m">“好坏参半” ${S.mixed2025}%</span>`:i===2?`<br><span class="m">“好坏参半” ${S.mixed2026}%</span>`:""}`,e)});
+    hit.addEventListener("mouseleave",()=>{cross.setAttribute("opacity",0);hideTip()})});
+  box.appendChild(h("div","legend",`<span><i class="f" style="--c:var(--tS)"></i>认为负面</span><span><i class="f" style="--c:var(--tW)"></i>认为正面</span><span style="color:var(--muted)">“好坏参半”从 51%（2025）降至 30%（2026）</span>`))})();
+
+/* ---------- use-case bars ---------- */
+(function(){const d=G.usecases,box=$("#useChart"),w=480,rowH=30,l=150,r=44,t=4;const hh=t+d.length*rowH+24;const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"生成式AI用途条形图"},box);const x=v=>l+(w-l-r)*v/100;
+  const g=el("g",{class:"grid"},svg);[0,25,50,75,100].forEach(v=>{el("line",{x1:x(v),x2:x(v),y1:t,y2:t+d.length*rowH},g);const tx=el("text",{x:x(v),y:hh-6,"text-anchor":"middle",class:"lbl-2"},svg);tx.textContent=v+"%"});
+  d.forEach((u,i)=>{const y=t+i*rowH,gr=el("g",{class:"row"},svg);el("rect",{x:0,y,width:w,height:rowH,class:"row-bg",rx:5},gr);const lb=el("text",{x:l-10,y:y+19,"text-anchor":"end",class:"lbl"},gr);lb.textContent=u.k;if(u.hi)lb.setAttribute("font-weight","700");
+    const bw=x(u.v)-l;const b=el("path",{d:roundBar(l,y+9,bw,12),fill:u.hi?"var(--accent)":"var(--neutral-bar)",class:"bar"},gr);b.style.transformOrigin=`${l}px 0`;const v=el("text",{x:l+bw+8,y:y+19,class:"val"},gr);v.textContent=u.v+"%";
+    el("rect",{x:0,y,width:w,height:rowH,class:"row-hit"},gr);gr.addEventListener("mousemove",e=>showTip(`<b>${u.k}</b><br>${u.v}% 的生成式 AI 使用者`,e));gr.addEventListener("mouseleave",hideTip);growOnView(b)});
+  box.appendChild(h("div","",`<span style="font-size:12.5px;color:var(--muted)">高亮两项是本报告关心的“生成式游戏设计”本体：PCG 与面向玩家的功能。</span>`))})();
+
+/* ---------- frontiers, recs, sources ---------- */
+G.frontiers.forEach(f=>$("#front").appendChild(h("article","fr rv",`<div class="en">${esc(f.en)}</div><h3>${esc(f.h)}</h3><p>${esc(f.x)}</p><ul>${f.p.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`)));
+G.recs.forEach(r=>$("#recs").appendChild(h("div","rec rv",`<h3>${r.who}</h3><ol>${r.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ol>`)));
+G.sources.forEach(([t,u])=>$("#srcList").appendChild(h("li","",`<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`)));
+
+armReveal();
+})();
+</script>

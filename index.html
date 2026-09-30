@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="LLM 驱动的生成式游戏设计与 PCG 2024–2026 年度综述：技术路线、世界模型演进、高引用论文、时间线、GDC 2026 产业数据与 2026 研究前沿。">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>生成式游戏设计年鉴 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<style>
+:root{
+  --ground:#f2f3ef; --surface:#fafbf8; --sunk:#e8ebe5;
+  --ink:#111416; --ink-2:#4a5156; --muted:#737b80; --rule:#d6dad3; --rule-2:#c3c8c0;
+  --accent:#3456d6; --accent-ink:#2743b3; --accent-soft:#e3e8fb;
+  --tW:#3456d6; --tS:#c7741a; --tR:#0f8f76; --tF:#8a3fb8;
+  --neutral-bar:#9aa2a6;
+  --shadow:0 1px 0 rgba(17,20,22,.04),0 12px 32px -18px rgba(17,20,22,.25);
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0e1214; --surface:#151a1d; --sunk:#1b2226;
+    --ink:#eceee9; --ink-2:#a9b1b4; --muted:#818b8f; --rule:#263034; --rule-2:#344045;
+    --accent:#7c93f7; --accent-ink:#9aabf9; --accent-soft:#1d2544;
+    --tW:#5b72ee; --tS:#c97d2a; --tR:#1c9a7d; --tF:#a064cf;
+    --neutral-bar:#5d676c;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 16px 40px -20px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0e1214; --surface:#151a1d; --sunk:#1b2226;
+  --ink:#eceee9; --ink-2:#a9b1b4; --muted:#818b8f; --rule:#263034; --rule-2:#344045;
+  --accent:#7c93f7; --accent-ink:#9aabf9; --accent-soft:#1d2544;
+  --tW:#5b72ee; --tS:#c97d2a; --tR:#1c9a7d; --tF:#a064cf;
+  --neutral-bar:#5d676c;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 16px 40px -20px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;padding-inline:clamp(16px,4vw,48px);padding-block:0 64px}
+a{color:var(--accent-ink);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* progress */
+#progress{position:fixed;left:0;right:0;top:0;height:2px;z-index:50;pointer-events:none}
+#progress i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:168px minmax(0,1fr);gap:56px}
+@media (max-width:1020px){.shell{grid-template-columns:minmax(0,1fr)}.rail{display:none}}
+
+/* chapter rail */
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 40px);align-self:start;padding-top:40px}
+.rail .brand{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);line-height:1.5;margin-bottom:28px}
+.rail .brand b{display:block;color:var(--ink);font-family:var(--serif);font-size:15px;letter-spacing:0;margin-bottom:4px}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rail a{display:grid;grid-template-columns:26px 1fr;align-items:center;gap:8px;text-decoration:none;color:var(--muted);font-size:13px;padding:6px 8px;border-radius:6px;transition:color .2s,background .2s}
+.rail a .n{font-family:var(--mono);font-size:11px}
+.rail a:hover{color:var(--ink);background:var(--sunk)}
+.rail a.on{color:var(--ink);background:var(--surface);box-shadow:inset 2px 0 0 var(--accent)}
+.rail .seedbox{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7;border-top:1px solid var(--rule);padding-top:14px}
+
+main{min-width:0}
+section{padding-block:88px 8px;scroll-margin-top:24px}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:40px;max-width:760px}
+.sec-head .eyebrow b{color:var(--accent-ink);font-weight:500}
+.sec-head h2{font-size:clamp(28px,3.4vw,40px);font-weight:900;line-height:1.2;letter-spacing:-.01em}
+.sec-head p{color:var(--ink-2);font-size:17px;max-width:62ch}
+
+/* reveal: resting state visible; JS arms only off-screen items */
+.rv{transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .8s}
+.rv.arm{transform:translateY(22px);opacity:.35}
+@media (prefers-reduced-motion:reduce){.rv,.rv.arm{transform:none!important;opacity:1!important;transition:none}}
+
+/* HERO */
+.hero{padding-block:56px 24px;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:48px;align-items:center}
+@media (max-width:1100px){.hero{grid-template-columns:minmax(0,1fr);gap:36px}}
+.hero h1{font-size:clamp(40px,5.6vw,76px);font-weight:900;line-height:1.08;letter-spacing:-.02em;margin-top:18px}
+.hero h1 em{font-style:normal;color:var(--accent-ink)}
+.hero .lede{margin-top:24px;font-size:18px;color:var(--ink-2);max-width:40ch;line-height:1.8}
+.hero .meta{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.hero .meta span::before{content:"▪ ";color:var(--accent)}
+
+.viewport{background:#0d1316;border-radius:14px;padding:12px;box-shadow:var(--shadow);color:#cfd6d4;font-family:var(--mono);font-size:11.5px;position:relative;isolation:isolate}
+.vp-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:2px 4px 10px;color:#7e8b8c;flex-wrap:wrap}
+.vp-bar .dots{display:flex;gap:6px}.vp-bar .dots i{width:8px;height:8px;border-radius:50%;background:#2a3437}
+.vp-bar b{color:#e8ecea;font-weight:500}
+#map{display:block;width:100%;height:auto;aspect-ratio:3/2;border-radius:8px;image-rendering:pixelated;cursor:crosshair;background:#11191c}
+.vp-foot{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 4px 2px}
+.vp-status{display:flex;flex-wrap:wrap;gap:6px 16px;color:#8a9798}
+.vp-status .ok{color:#6fd3a8}.vp-status .bad{color:#f09a6c}
+.prompts{display:flex;flex-wrap:wrap;gap:6px;padding:4px 4px 2px}
+.prompts button,.regen{font:inherit;color:#cfd6d4;background:#182226;border:1px solid #2a363a;border-radius:999px;padding:5px 11px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.prompts button:hover,.regen:hover{border-color:#5b72ee;color:#fff}
+.prompts button[aria-pressed="true"]{background:#23307a;border-color:#5b72ee;color:#fff}
+.regen{background:#e8ecea;color:#0d1316;border-color:#e8ecea;font-weight:600}
+.regen:hover{background:#fff;color:#0d1316}
+#hoverinfo{position:absolute;right:22px;top:52px;background:rgba(13,19,22,.86);border:1px solid #2a363a;padding:4px 8px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .15s}
+
+.kpis{margin-top:56px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{padding:20px 20px 22px 0;display:grid;gap:6px;align-content:start}
+.kpi+.kpi{padding-left:20px;border-left:1px solid var(--rule)}
+@media (max-width:760px){.kpi:nth-child(3){padding-left:0;border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}}
+.kpi .v{font-family:var(--serif);font-weight:900;font-size:clamp(34px,4vw,48px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:.5em;margin-left:2px}
+.kpi .l{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.kpi .s{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+
+/* findings */
+.findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+@media (max-width:1100px){.findings{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.findings{grid-template-columns:minmax(0,1fr)}}
+.finding{background:var(--surface);padding:28px 26px 30px;display:grid;grid-template-rows:auto auto 1fr;gap:12px;transition:background .25s}
+.finding:hover{background:var(--ground)}
+.finding .num{font-family:var(--mono);font-size:13px;color:var(--accent-ink);display:flex;justify-content:space-between;gap:12px}
+.finding .num span{color:var(--muted)}
+.finding h3{font-size:19px;line-height:1.45;font-weight:900}
+.finding p{font-size:14.5px;color:var(--ink-2);line-height:1.8}
+
+/* taxonomy */
+.tax{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:start}
+@media (max-width:980px){.tax{grid-template-columns:minmax(0,1fr)}}
+.tracks{display:grid;gap:10px}
+.track{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;padding:18px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .2s,transform .2s,box-shadow .2s}
+.track:hover,.track[aria-pressed="true"]{border-color:var(--c);box-shadow:var(--shadow)}
+.track[aria-pressed="true"]{transform:translateX(4px)}
+.track .sw{width:14px;height:14px;border-radius:3px;background:var(--c);margin-top:6px}
+.track h3{font-size:17px;font-weight:900}
+.track .en{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.track p{font-size:14px;color:var(--ink-2);margin-top:4px;line-height:1.7}
+.track .cnt{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;margin-top:4px}
+.track .ex{grid-column:2/4;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);line-height:1.7}
+.flow{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 18px 12px;overflow-x:auto}
+.flow svg{display:block;width:100%;min-width:560px;height:auto}
+.flow .cap{font-size:13px;color:var(--muted);padding:8px 4px 2px;line-height:1.7}
+.fl-node rect{fill:var(--ground);stroke:var(--rule-2);stroke-width:1}
+.fl-node text{fill:var(--ink);font-family:var(--sans);font-size:13px}
+.fl-node .sub{fill:var(--muted);font-family:var(--mono);font-size:10px}
+.fl-edge{fill:none;stroke:var(--rule-2);stroke-width:1.5}
+.fl-node.t rect{stroke:var(--c);stroke-width:1.5}
+.fl-edge.t{stroke:var(--c)}
+.flow svg.dim .t:not(.on){opacity:.18}
+.flow svg .t{transition:opacity .3s}
+.fl-loop{fill:none;stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:4 4}
+@keyframes dash{to{stroke-dashoffset:-32}}
+.fl-loop{animation:dash 2.4s linear infinite}
+@media (prefers-reduced-motion:reduce){.fl-loop{animation:none}}
+
+/* chart shells */
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px 24px 18px}
+.panel h3{font-size:18px;font-weight:900}
+.panel .sub{font-size:13px;color:var(--muted);margin-top:4px}
+.chart{margin-top:18px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.axis text,.tick text{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+.grid line{stroke:var(--rule);stroke-width:1}
+.baseline{stroke:var(--ink-2);stroke-width:1}
+.lbl{fill:var(--ink);font-family:var(--sans);font-size:12.5px}
+.lbl-2{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+.val{fill:var(--ink-2);font-family:var(--mono);font-size:11px}
+.bar{transition:opacity .25s, transform .9s cubic-bezier(.2,.7,.2,1)}
+.row-hit{fill:transparent;cursor:pointer}
+.row:hover .row-bg{fill:var(--sunk)}
+.row-bg{fill:transparent;transition:fill .15s}
+
+#tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:var(--ground);padding:10px 12px;border-radius:8px;font-size:12.5px;line-height:1.6;max-width:300px;box-shadow:var(--shadow);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}
+#tip.on{opacity:1;transform:none}
+#tip b{font-weight:700}
+#tip .m{font-family:var(--mono);font-size:11px;opacity:.75}
+
+/* world specs */
+.two{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:20px}
+@media (max-width:980px){.two{grid-template-columns:minmax(0,1fr)}}
+.tbl-wrap{overflow-x:auto}
+table.spec{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+.spec th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:0 10px 10px 0;border-bottom:1px solid var(--ink)}
+.spec td{padding:11px 10px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.spec td.m{font-family:var(--mono);font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.spec tr:hover td{background:var(--sunk)}
+.spec b{font-weight:700}
+
+/* papers */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.chip{font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;border:1px solid var(--rule-2);background:var(--surface);color:var(--ink-2);cursor:pointer;transition:all .2s}
+.chip i{width:9px;height:9px;border-radius:2px;background:var(--c,var(--ink-2))}
+.chip:hover{color:var(--ink);border-color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.controls .note{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
+#paperDetail{margin-top:14px;border-top:1px solid var(--rule);padding-top:16px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 18px;align-items:start;min-height:108px}
+#paperDetail .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
+#paperDetail h4{margin:0;font-family:var(--serif);font-size:16px;line-height:1.5}
+#paperDetail p{font-size:14px;color:var(--ink-2);grid-column:2/3}
+#paperDetail .by{font-family:var(--mono);font-size:11.5px;color:var(--muted);grid-column:2/3}
+#paperDetail .c{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1;text-align:right}
+#paperDetail .c small{display:block;font-family:var(--mono);font-weight:400;font-size:10.5px;color:var(--muted);margin-top:6px}
+.copy{font:inherit;font-family:var(--mono);font-size:11px;border:1px solid var(--rule-2);background:transparent;color:var(--ink-2);border-radius:6px;padding:3px 8px;cursor:pointer;margin-top:10px}
+.copy:hover{color:var(--ink);border-color:var(--ink-2)}
+@media (max-width:640px){#paperDetail{grid-template-columns:minmax(0,1fr)}#paperDetail p,#paperDetail .by{grid-column:auto}#paperDetail .c{text-align:left}}
+
+.found{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.found div{border:1px dashed var(--rule-2);border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.found b{font-family:var(--serif);font-size:14.5px}
+.found .m{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.found span{font-size:12.5px;color:var(--ink-2);line-height:1.6}
+
+/* timeline */
+.tl-controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.tl-year{display:grid;grid-template-columns:180px minmax(0,1fr);gap:24px;border-top:1px solid var(--ink)}
+@media (max-width:760px){.tl-year{grid-template-columns:minmax(0,1fr);gap:0}}
+.tl-year .yr{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;font-family:var(--serif);font-weight:900;font-size:clamp(44px,6vw,72px);line-height:1;padding-block:18px;letter-spacing:-.03em;color:var(--ink)}
+.tl-year .yr small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.08em;color:var(--muted);margin-top:10px}
+@media (max-width:760px){.tl-year .yr{position:static;font-size:44px}}
+.tl-list{list-style:none;margin:0;padding:0}
+.tl-item{display:grid;grid-template-columns:78px 16px minmax(0,1fr);gap:14px;padding:18px 0;border-bottom:1px solid var(--rule)}
+.tl-item .d{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:3px}
+.tl-item .k{width:10px;height:10px;margin-top:8px;border-radius:50%;border:2px solid var(--kc);background:var(--surface)}
+.tl-item[data-k="r"]{--kc:var(--tW)}.tl-item[data-k="i"]{--kc:var(--tS)}.tl-item[data-k="p"]{--kc:var(--tR)}
+.tl-item[data-k="r"] .k{background:var(--kc)}
+.tl-item[data-k="p"] .k{border-radius:2px}
+.tl-item h4{margin:0;font-size:16px;font-weight:700;line-height:1.5}
+.tl-item p{font-size:14px;color:var(--ink-2);margin-top:4px;line-height:1.75}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:10px;height:10px;border-radius:50%;border:2px solid var(--c)}
+.legend i.f{background:var(--c)}.legend i.sq{border-radius:2px}
+
+/* industry */
+.ind{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:980px){.ind{grid-template-columns:minmax(0,1fr)}}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin-bottom:20px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);padding:18px 18px 20px;display:grid;gap:4px;align-content:start}
+.tile .v{font-family:var(--serif);font-weight:900;font-size:32px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .l{font-size:13px;color:var(--ink-2);line-height:1.55}
+.events{margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:980px){.events{grid-template-columns:minmax(0,1fr)}}
+.event{border:1px solid var(--rule);border-radius:12px;padding:18px;background:var(--surface);display:grid;gap:8px;align-content:start}
+.event .when{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.event h4{margin:0;font-size:15.5px;line-height:1.5}
+.event p{font-size:13.5px;color:var(--ink-2);line-height:1.75}
+
+/* frontiers */
+.front{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--ink)}
+@media (max-width:860px){.front{grid-template-columns:minmax(0,1fr)}}
+.fr{padding:28px 28px 30px 0;border-bottom:1px solid var(--rule);display:grid;gap:10px;align-content:start}
+.fr:nth-child(even){padding-left:28px;padding-right:0;border-left:1px solid var(--rule)}
+@media (max-width:860px){.fr:nth-child(even){padding-left:0;border-left:0}}
+.fr .en{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.fr h3{font-size:22px;font-weight:900}
+.fr p{font-size:14.5px;color:var(--ink-2);line-height:1.85}
+.fr ul{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.fr li{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;background:var(--sunk);color:var(--ink-2)}
+
+/* recs */
+.recs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:980px){.recs{grid-template-columns:minmax(0,1fr)}}
+.rec{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px}
+.rec h3{font-size:19px;font-weight:900;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.rec ol{margin:14px 0 0;padding:0;list-style:none;counter-reset:r;display:grid;gap:14px}
+.rec li{counter-increment:r;display:grid;grid-template-columns:24px 1fr;gap:6px;font-size:14px;color:var(--ink-2);line-height:1.75}
+.rec li::before{content:counter(r,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--accent-ink);padding-top:3px}
+
+.sources{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;font-size:13.5px;color:var(--ink-2)}
+@media (max-width:860px){.sources{grid-template-columns:minmax(0,1fr)}}
+.sources ol{margin:0;padding-left:20px;display:grid;gap:8px}
+.sources a{word-break:break-word}
+footer{max-width:1240px;margin:72px auto 0;padding-top:20px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+</style>
+
+</head>
+<body>
+<div id="progress"><i></i></div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="章节导航">
+    <div class="brand"><b>生成式游戏设计年鉴</b>2024 — 2026<br>LLM · PCG · WORLD MODELS</div>
+    <ol id="railList"></ol>
+    <div class="seedbox">检索日 2026-09-27<br>论文 28 篇 · 事件 33 条<br>引用源 Semantic Scholar</div>
+  </aside>
+
+  <main>
+    <!-- HERO -->
+    <header class="hero" id="top">
+      <div>
+        <div class="eyebrow">Annual Review · Generative Game Design · 2024–2026</div>
+        <h1>当关卡学会<em>自己生长</em></h1>
+        <p class="lede">LLM 驱动的生成式游戏设计，三年里从“让模型写一张马里奥关卡”走到“让模型直接成为引擎”。这份年鉴汇总全球研究与产业进展，并按引用量梳理了这个领域真正被引用的工作。</p>
+        <div class="meta"><span>28 篇核心论文</span><span>33 个里程碑</span><span>GDC 2026 行业数据</span></div>
+      </div>
+
+      <figure class="viewport" style="margin:0" aria-label="程序化关卡生成演示">
+        <div class="vp-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div>seed <b id="seedOut">0x7E3A</b> · 48×32 tiles · <span id="biomeOut">温带群岛</span></div>
+        </div>
+        <canvas id="map" width="480" height="320"></canvas>
+        <div id="hoverinfo">(0,0) grass</div>
+        <div class="prompts" role="group" aria-label="生成提示">
+          <button type="button" data-b="0" aria-pressed="true">“温带群岛”</button>
+          <button type="button" data-b="1">“被潮汐淹没的神殿”</button>
+          <button type="button" data-b="2">“沙海遗迹”</button>
+          <button type="button" data-b="3">“冰原与火山”</button>
+        </div>
+        <div class="vp-foot">
+          <div class="vp-status" id="vpStatus"><span>生成 → 验证</span></div>
+          <button type="button" class="regen" id="regen">重新生成 ↻</button>
+        </div>
+      </figure>
+    </header>
+
+    <div class="kpis rv" aria-label="关键数字">
+      <div class="kpi"><div class="v">52<small>%</small></div><div class="l">受访者所在公司已在使用生成式 AI</div><div class="s">GDC 2026 · n&gt;2,300</div></div>
+      <div class="kpi"><div class="v">52<small>%</small></div><div class="l">认为生成式 AI 对行业有负面影响（2024 年为 18%）</div><div class="s">GDC 2026</div></div>
+      <div class="kpi"><div class="v">10<small>%</small></div><div class="l">使用者把它用于程序化生成；面向玩家的功能仅 5%</div><div class="s">GDC 2026</div></div>
+      <div class="kpi"><div class="v">829</div><div class="l">Genie 的引用数，是本领域引用最高的“可玩世界模型”论文</div><div class="s">Semantic Scholar · 2026-09</div></div>
+    </div>
+
+    <section id="s1" data-title="核心结论">
+      <div class="sec-head rv"><div class="eyebrow"><b>01</b> · Key findings</div><h2>六个判断</h2><p>把三年的论文、产品与行业调查放在一起看，这是最值得记住的六件事。</p></div>
+      <div class="findings" id="findings"></div>
+    </section>
+
+    <section id="s2" data-title="技术谱系">
+      <div class="sec-head rv"><div class="eyebrow"><b>02</b> · Taxonomy</div><h2>四条技术路线</h2><p>“生成式游戏设计”不是一种技术，而是四条互相借力的路线。点选任一路线，右侧管线会标出它在生成循环中的位置。</p></div>
+      <div class="tax">
+        <div class="tracks" id="tracks" role="group" aria-label="技术路线"></div>
+        <div class="flow rv">
+          <svg id="flow" viewBox="0 0 700 390" role="img" aria-label="生成式游戏设计管线示意图"></svg>
+          <div class="cap">虚线为 2026 年研究重点：把引擎校验与自动试玩的结果回灌到生成端，形成“生成 → 验证 → 修正”的闭环。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3" data-title="世界模型演进">
+      <div class="sec-head rv"><div class="eyebrow"><b>03</b> · Neural engines</div><h2>从 1 帧到 24 帧：模型即引擎</h2><p>神经世界模型逐帧预测“按下这个键之后会看到什么”。下表只列厂商或论文公开给出的数字；未公开的指标保留为空。</p></div>
+      <div class="two">
+        <div class="panel rv">
+          <h3>实时帧率</h3>
+          <div class="sub">单位 fps · 仅含公开数字的系统</div>
+          <div class="chart" id="fpsChart"></div>
+        </div>
+        <div class="panel rv">
+          <h3>规格台账</h3>
+          <div class="sub">分辨率与一致性时长决定了“能不能玩”</div>
+          <div class="tbl-wrap" style="margin-top:14px"><table class="spec" id="specTable"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4" data-title="高引用论文">
+      <div class="sec-head rv"><div class="eyebrow"><b>04</b> · Most-cited papers</div><h2>谁被引用最多</h2><p>2024 年以来首次发布、与生成式游戏设计直接相关或紧邻的论文，按 Semantic Scholar 引用数排序。点击任一行查看摘要。标“相邻”的工作来自 3D 资产或物理 AI 领域，但被游戏研究大量引用。</p></div>
+      <div class="panel rv">
+        <div class="controls" id="paperFilters" role="group" aria-label="按路线筛选"></div>
+        <div class="chart" id="paperChart"></div>
+        <div id="paperDetail" aria-live="polite"></div>
+      </div>
+      <h3 class="rv" style="font-size:17px;margin-top:40px">奠基工作 · 2023</h3>
+      <p class="rv" style="font-size:14px;color:var(--ink-2);margin-top:6px">不在 2024–2026 的统计窗口内，但几乎所有后续工作都会引用它们。</p>
+      <div class="found" id="found"></div>
+    </section>
+
+    <section id="s5" data-title="时间线">
+      <div class="sec-head rv"><div class="eyebrow"><b>05</b> · Timeline</div><h2>33 个月，33 个节点</h2><p>研究突破、产品发布与规则变化交替推进。可按类型筛选。</p></div>
+      <div class="tl-controls" id="tlFilters" role="group" aria-label="时间线筛选"></div>
+      <div id="timeline"></div>
+    </section>
+
+    <section id="s6" data-title="产业脉搏">
+      <div class="sec-head rv"><div class="eyebrow"><b>06</b> · Industry pulse</div><h2>用的人更多了，喜欢的人更少了</h2><p>GDC《2026 State of the Game Industry》调查了超过 2,300 名从业者。生成式 AI 正在进入工作流，但主要集中在“看不见”的环节。</p></div>
+      <div class="tiles rv">
+        <div class="tile"><div class="v">36%</div><div class="l">从业者本人在工作中使用</div></div>
+        <div class="tile"><div class="v">78%</div><div class="l">所在公司已有 AI 使用政策</div></div>
+        <div class="tile"><div class="v">58% / 30%</div><div class="l">发行、营销岗 vs 游戏工作室的使用率</div></div>
+        <div class="tile"><div class="v">~20%</div><div class="l">2025 年 Steam 新作带 AI 披露（AI and Games 统计）</div></div>
+      </div>
+      <div class="ind">
+        <div class="panel rv"><h3>对行业影响的看法</h3><div class="sub">受访者占比 · 2024–2026</div><div class="chart" id="sentChart"></div></div>
+        <div class="panel rv"><h3>生成式 AI 用在哪里</h3><div class="sub">使用者中的占比，可多选 · 2026</div><div class="chart" id="useChart"></div></div>
+      </div>
+      <div class="events">
+        <div class="event rv"><div class="when">2025-12 · 评奖</div><h4>《光与影：33 号远征队》被撤销独立游戏奖</h4><p>首发版本含生成式 AI 制作的占位纹理（发售五天后已移除），Indie Game Awards 仍收回“年度独立游戏”与“最佳独立首作”。</p></div>
+        <div class="event rv"><div class="when">2025-10 → 2026-03 · 配音</div><h4>ARC Raiders 回炉重录 AI 语音</h4><p>TTS 语音在评测中被批评。Embark CEO 在 2026 年 3 月表示，部分 AI 语音已用真人演员重新录制，理由是质量差距明显。</p></div>
+        <div class="event rv"><div class="when">2026-01 · 资本市场</div><h4>Project Genie 上线，游戏股承压</h4><p>Genie 3 以网页原型向美国 AI Ultra 订阅者开放，单次探索限 60 秒。发布后多家游戏公司股价下跌，市场开始为“提示即世界”定价。</p></div>
+      </div>
+    </section>
+
+    <section id="s7" data-title="2026 前沿">
+      <div class="sec-head rv"><div class="eyebrow"><b>07</b> · Research frontier 2026</div><h2>2026：从“能生成”到“能验证”</h2><p>对 2026 年 arXiv 新论文的梳理显示，研究重心已经从生成质量转向规则正确、长时一致与自动评测。</p></div>
+      <div class="front" id="front"></div>
+    </section>
+
+    <section id="s8" data-title="行动建议">
+      <div class="sec-head rv"><div class="eyebrow"><b>08</b> · Recommendations</div><h2>给三类读者的建议</h2></div>
+      <div class="recs" id="recs"></div>
+    </section>
+
+    <section id="s9" data-title="方法与来源">
+      <div class="sec-head rv"><div class="eyebrow"><b>09</b> · Method &amp; sources</div><h2>方法与来源</h2></div>
+      <div class="sources rv">
+        <div>
+          <p><b>检索范围。</b>2024-01 至 2026-09，全球英文学术文献与产业公开信息。论文候选来自领域综述的参考文献、arXiv 关键词检索（procedural content generation、game world model、LLM game generation 等）与主要实验室发布。</p>
+          <p style="margin-top:12px"><b>引用数。</b>来自 Semantic Scholar Graph API，统一于 2026-09-27 批量检索。不同数据库口径不同（Google Scholar 通常更高），因此只宜做相对比较。“2024–2026”按 arXiv 首次公开年份划分。</p>
+          <p style="margin-top:12px"><b>产业数据。</b>采用厂商官方发布与 GDC 年度调查原文；二手报道仅用于事件定位，数字以一手来源为准。</p>
+        </div>
+        <ol id="srcList"></ol>
+      </div>
+    </section>
+  </main>
+</div>
+<footer><span>生成式游戏设计年鉴 · 2024–2026</span><span>数据截至 2026-09-27</span></footer>
+
+<script>/* 生成式游戏设计年鉴 2024–2026 · 共享数据
+   引用数：Semantic Scholar Graph API，检索于 2026-09-27。
+   产业数据：GDC《2026 State of the Game Industry》(2026-01，n>2,300)、Google DeepMind / Microsoft / World Labs / Decart 官方发布、Wikipedia 相关条目。 */
+window.GP = {
+  retrieved: "2026-09-27",
+
+  tracks: {
+    W: { name: "神经世界模型", en: "Neural world models", desc: "以动作为条件、逐帧生成画面的“模型即引擎”。" },
+    S: { name: "内容与场景生成", en: "Levels, scenes & narrative", desc: "LLM 生成关卡、叙事、2D/3D 场景等显式内容。" },
+    R: { name: "规则与代码合成", en: "Rules, mechanics & code", desc: "LLM 写出可执行的规则、机制乃至完整游戏。" },
+    F: { name: "资产 · 智能体 · 综述", en: "Assets, agents & surveys", desc: "3D 资产基座、游戏智能体与领域综述/基准。" }
+  },
+
+  /* 2024–2026 首次发布的论文（arXiv 首发年份） */
+  papers: [
+    { id: "2412.01506", t: "Structured 3D Latents for Scalable and Versatile 3D Generation (TRELLIS)", s: "TRELLIS", a: "Xiang et al.", org: "Microsoft Research", y: 2024, v: "CVPR 2025", c: 907, k: "F", adj: true, n: "结构化 3D 潜空间，一次生成网格、辐射场与高斯；成为游戏 3D 资产管线的通用底座。" },
+    { id: "2501.03575", t: "Cosmos World Foundation Model Platform for Physical AI", s: "Cosmos WFM", a: "NVIDIA", org: "NVIDIA", y: 2025, v: "arXiv", c: 865, k: "W", adj: true, n: "开放权重的世界基础模型平台，面向物理 AI；与游戏世界模型共享架构与数据方法。" },
+    { id: "2402.15391", t: "Genie: Generative Interactive Environments", s: "Genie", a: "Bruce et al.", org: "Google DeepMind", y: 2024, v: "ICML 2024 最佳论文", c: 829, k: "W", n: "从无动作标注的网络游戏视频中学出潜在动作空间，11B 参数，开启“可玩世界模型”路线。" },
+    { id: "2501.12202", t: "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation", s: "Hunyuan3D 2.0", a: "Zhao et al.", org: "腾讯混元", y: 2025, v: "arXiv", c: 417, k: "F", n: "开源高分辨率带纹理 3D 资产生成，被大量游戏团队用于原型与长尾资产。" },
+    { id: "2405.12399", t: "Diffusion for World Modeling: Visual Details Matter in Atari", s: "DIAMOND", a: "Alonso et al.", org: "日内瓦大学 / 爱丁堡大学", y: 2024, v: "NeurIPS 2024 Spotlight", c: 336, k: "W", n: "扩散世界模型；在 Atari 上训练智能体，并演示了可玩的 CS:GO 神经模拟。" },
+    { id: "2408.14837", t: "Diffusion Models Are Real-Time Game Engines", s: "GameNGen", a: "Valevski et al.", org: "Google Research", y: 2024, v: "ICLR 2025", c: 300, k: "W", n: "单 TPU 以 20 fps 实时运行《DOOM》，人类评审难以区分真伪片段。" },
+    { id: "2406.09394", t: "WonderWorld: Interactive 3D Scene Generation from a Single Image", s: "WonderWorld", a: "Yu et al.", org: "Stanford", y: 2024, v: "CVPR 2025", c: 227, k: "S", n: "从单张图像交互式扩展 3D 场景，用户可边走边生成相连区域。" },
+    { id: "2402.18659", t: "Large Language Models and Games: A Survey and Roadmap", s: "LLMs & Games 综述", a: "Gallotta, Todd, Zammit, Earle, Liapis, Togelius, Yannakakis", org: "马耳他大学 / NYU", y: 2024, v: "IEEE Transactions on Games", c: 192, k: "F", n: "领域奠基综述：梳理 LLM 在游戏中的玩家、设计者、叙事者等角色，并给出研究路线图。" },
+    { id: "2508.13009", t: "Matrix-Game 2.0: An Open-Source, Real-Time, and Streaming Interactive World Model", s: "Matrix-Game 2.0", a: "He et al.", org: "Skywork AI（昆仑万维）", y: 2025, v: "arXiv", c: 157, k: "W", n: "少步自回归扩散实现实时流式生成，约 1,200 小时 UE/GTA5 交互数据，完全开源。" },
+    { id: "2504.12369", t: "WORLDMEM: Long-term Consistent World Simulation with Memory", s: "WorldMem", a: "Xiao et al.", org: "NTU S-Lab", y: 2025, v: "NeurIPS 2025", c: 147, k: "W", n: "引入记忆库检索历史帧与状态，缓解世界模型“回头就变样”的一致性问题。" },
+    { id: "2403.01248", t: "SceneCraft: An LLM Agent for Synthesizing 3D Scene as Blender Code", s: "SceneCraft", a: "Hu et al.", org: "Caltech / Google", y: 2024, v: "ICML 2024", c: 144, k: "S", n: "LLM 智能体把文本描述编译为 Blender Python 代码，并以视觉反馈迭代修正场景。" },
+    { id: "2404.02039", t: "A Survey on Large Language Model-Based Game Agents", s: "LLM 游戏智能体综述", a: "Hu et al.", org: "Georgia Tech", y: 2024, v: "arXiv", c: 142, k: "F", n: "按感知、记忆、推理、行动等模块系统梳理 LLM 游戏智能体。" },
+    { id: "2411.13543", t: "BALROG: Benchmarking Agentic LLM and VLM Reasoning On Games", s: "BALROG", a: "Paglieri et al.", org: "UCL / Oxford", y: 2024, v: "ICLR 2025", c: 135, k: "F", n: "用 NetHack 等游戏评测 LLM/VLM 的长程智能体推理能力。" },
+    { id: "2411.00769", t: "GameGen-X: Interactive Open-world Game Video Generation", s: "GameGen-X", a: "Che et al.", org: "港科大 等", y: 2024, v: "ICLR 2025", c: 135, k: "W", n: "首个专为开放世界游戏视频生成与交互控制设计的扩散 Transformer。" },
+    { id: "2501.08325", t: "GameFactory: Creating New Games with Generative Interactive Videos", s: "GameFactory", a: "Yu et al.", org: "港大 / 快手", y: 2025, v: "ICCV 2025", c: 131, k: "W", n: "把动作控制从小规模游戏数据泛化到开放域场景，用于“创造新游戏”。" },
+    { id: "2507.21809", t: "HunyuanWorld 1.0: Generating Immersive, Explorable, and Interactive 3D Worlds from Words or Pixels", s: "HunyuanWorld 1.0", a: "HunyuanWorld Team", org: "腾讯混元", y: 2025, v: "arXiv", c: 96, k: "S", n: "文本/图像生成全景可探索 3D 世界，输出可导入引擎的分层网格。" },
+    { id: "2412.03568", t: "The Matrix: Infinite-Horizon World Generation with Real-Time Moving Control", s: "The Matrix", a: "Feng et al.", org: "—", y: 2024, v: "NeurIPS 2025", c: 91, k: "W", n: "面向无限时长、实时移动控制的世界生成，训练于 AAA 游戏数据并泛化至真实场景。" },
+    { id: "2504.08388", t: "MineWorld: a Real-Time and Open-Source Interactive World Model on Minecraft", s: "MineWorld", a: "Guo et al.", org: "Microsoft Research", y: 2025, v: "arXiv", c: 90, k: "W", n: "Minecraft 上的实时开源世界模型，采用并行解码提升帧率。" },
+    { id: "2506.17201", t: "Hunyuan-GameCraft: High-dynamic Interactive Game Video Generation with Hybrid History Condition", s: "Hunyuan-GameCraft", a: "Li et al.", org: "腾讯混元", y: 2025, v: "arXiv", c: 85, k: "W", n: "统一键鼠动作表征与混合历史条件，生成高动态、可交互的游戏视频。" },
+    { id: "2404.10179", t: "Scaling Instructable Agents Across Many Simulated Worlds", s: "SIMA", a: "SIMA Team", org: "Google DeepMind", y: 2024, v: "arXiv", c: 83, k: "F", n: "在多款商业 3D 游戏中以自然语言指令驱动的通用智能体。" },
+    { id: "s41586-025-08600-3", t: "World and Human Action Models towards gameplay ideation", s: "Muse / WHAM", a: "Kanervisto et al.", org: "Microsoft Research × Ninja Theory", y: 2025, v: "Nature", c: 74, k: "W", n: "以《Bleeding Edge》对局数据训练，生成画面与手柄动作，面向玩法构思而非替代引擎。" },
+    { id: "2507.17744", t: "Yume: An Interactive World Generation Model", s: "Yume", a: "Mao et al.", org: "上海 AI Lab 等", y: 2025, v: "arXiv", c: 71, k: "W", n: "从图像出发、以键鼠控制探索的交互式世界生成。" },
+    { id: "2410.15644", t: "Procedural Content Generation in Games: A Survey with Insights on Emerging LLM Integration", s: "PCG × LLM 综述", a: "Maleki & Zhao", org: "—", y: 2024, v: "AIIDE 2024", c: 63, k: "F", n: "回顾二十年 PCG 方法谱系，专门讨论 LLM 带来的新范式。" },
+    { id: "2405.13042", t: "StoryVerse: Towards Co-authoring Dynamic Plot with LLM-based Character Simulation via Narrative Planning", s: "StoryVerse", a: "Wang et al.", org: "—", y: 2024, v: "FDG 2024", c: 49, k: "S", n: "作者意图 × 角色模拟的混合叙事规划，支持动态剧情共创。" },
+    { id: "2404.08706", t: "Game Generation via Large Language Models", s: "VGDL 游戏生成", a: "Hu, Zhao, Liu", org: "南方科技大学", y: 2024, v: "IEEE CoG 2024", c: 32, k: "R", n: "用 LLM 同时生成 VGDL 规则与关卡，探讨提示设计对可玩性的影响。" },
+    { id: "2407.09388", t: "GAVEL: Generating Games Via Evolution and Language Models", s: "GAVEL", a: "Todd et al.", org: "NYU / Maastricht", y: 2024, v: "NeurIPS 2024", c: 32, k: "R", n: "以 LLM 作为变异算子、质量多样性搜索在 Ludii 语言中进化出新桌游规则。" },
+    { id: "2405.06686", t: "Word2World: Generating Stories and Worlds through Large Language Models", s: "Word2World", a: "Nasir, James, Togelius", org: "NYU 等", y: 2024, v: "arXiv", c: 31, k: "S", n: "先写故事、再抽取角色与地块，最终生成可玩的 2D 世界。" },
+    { id: "2412.00887", t: "Playable Game Generation", s: "PlayGen", a: "Yang et al.", org: "—", y: 2024, v: "arXiv", c: 26, k: "R", n: "强调“可玩性”而非画面：数据、模型与评测三方面联合设计。" }
+  ],
+
+  /* 2023 年奠基工作（被本领域反复引用） */
+  foundations: [
+    { s: "Generative Agents", a: "Park et al.", v: "UIST 2023", c: 5674, n: "“西部小镇”式可信 NPC 社会模拟" },
+    { s: "Voyager", a: "Wang et al.", v: "TMLR", c: 2343, n: "Minecraft 中终身学习的 LLM 智能体" },
+    { s: "LayoutGPT", a: "Feng et al.", v: "NeurIPS 2023", c: 447, n: "LLM 生成 2D/3D 布局" },
+    { s: "Holodeck", a: "Yang et al.", v: "CVPR 2024", c: 343, n: "语言驱动的 3D 室内环境生成" },
+    { s: "Level Generation Through LLMs", a: "Todd et al.", v: "FDG 2023", c: 134, n: "LLM 生成 Sokoban 关卡的首个系统研究" },
+    { s: "3D-GPT", a: "Sun et al.", v: "3DV 2025", c: 121, n: "LLM 调度程序化 3D 建模" },
+    { s: "MarioGPT", a: "Sudhakaran et al.", v: "NeurIPS 2023", c: 111, n: "文本到马里奥关卡的开放式生成" }
+  ],
+
+  /* 世界模型规格演进（仅列官方公开的数字） */
+  worldspecs: [
+    { m: "Genie", d: "2024-02", org: "Google DeepMind", fps: 1, res: "2D", horizon: "短片段", note: "11B 参数，从网络视频学习潜在动作" },
+    { m: "GameNGen", d: "2024-08", org: "Google Research", fps: 20, res: "DOOM 原生", horizon: "多分钟稳定", note: "单 TPU" },
+    { m: "Oasis", d: "2024-10", org: "Decart × Etched", fps: 20, res: "—", horizon: "开放游玩", note: "首个公开可玩的实时 AI Minecraft" },
+    { m: "Genie 2", d: "2024-12", org: "Google DeepMind", fps: null, res: "360p", horizon: "10–20 秒", note: "首次支持 3D 与第一人称" },
+    { m: "Muse / WHAM", d: "2025-02", org: "Microsoft", fps: 10, res: "300×180", horizon: "玩法片段", note: "Nature 论文，面向玩法构思" },
+    { m: "Genie 3", d: "2025-08", org: "Google DeepMind", fps: 24, res: "720p", horizon: "数分钟 · 记忆约 1 分钟", note: "可提示的世界事件" },
+    { m: "Matrix-Game 3.0", d: "2026-04", org: "Skywork AI", fps: null, res: "720p", horizon: "长时记忆", note: "实时流式、开源" }
+  ],
+
+  /* GDC 2026 State of the Game Industry */
+  sentiment: {
+    years: [2024, 2025, 2026],
+    positive: [21, 13, 7],
+    negative: [18, 30, 52],
+    mixed2025: 51, mixed2026: 30
+  },
+  usecases: [
+    { k: "调研 / 头脑风暴", v: 81 },
+    { k: "邮件与日常事务", v: 47 },
+    { k: "代码辅助", v: 47 },
+    { k: "原型制作", v: 35 },
+    { k: "测试 / 调试", v: 22 },
+    { k: "市场与宣传内容", v: 20 },
+    { k: "资产生成", v: 19 },
+    { k: "程序化生成（PCG）", v: 10, hi: true },
+    { k: "面向玩家的功能", v: 5, hi: true }
+  ],
+  adoption: { personal: 36, company: 52, policy: 78, studio: 30, publisher: 58, mgmt: 47, ic: 29 },
+
+  /* 时间线：r = 研究，i = 产业，p = 政策与劳工 */
+  timeline: [
+    { d: "2024-01", k: "p", t: "Steam 要求披露生成式 AI", x: "Valve 更新规则：使用生成式 AI 内容的游戏须在商店页披露，并说明防止生成违规内容的措施。" },
+    { d: "2024-02", k: "r", t: "Genie 发布", x: "DeepMind 以 11B 参数模型从无标注游戏视频中学会“可玩”，7 月获 ICML 2024 最佳论文。" },
+    { d: "2024-02", k: "r", t: "《LLMs and Games》综述", x: "Gallotta、Togelius、Yannakakis 等发表领域路线图，后刊于 IEEE Transactions on Games。" },
+    { d: "2024-03", k: "i", t: "Roblox Studio 引入生成式工具", x: "上线自动化身设置与文本生成纹理两项 AI 工具。" },
+    { d: "2024-08", k: "r", t: "GameNGen：扩散模型跑《DOOM》", x: "Google 在单 TPU 上以 20 fps 实时模拟《DOOM》，“神经游戏引擎”概念出圈。" },
+    { d: "2024-09", k: "p", t: "加州 AB 1836 / AB 2602 签署", x: "为表演者的数字复制品（含配音与动捕）建立同意与授权要求。" },
+    { d: "2024-10", k: "i", t: "Oasis 公开可玩", x: "Decart 与 Etched 发布实时 AI 生成的 Minecraft 式世界，20 fps，无传统游戏代码。" },
+    { d: "2024-10", k: "i", t: "Unity 6 发布", x: "随附 Unity Muse 与 Sentis 生成式/推理工具。" },
+    { d: "2024-12", k: "r", t: "Genie 2", x: "扩展到 3D 与第一人称视角，360p，可维持 10–20 秒一致。" },
+    { d: "2025-02", k: "r", t: "Muse / WHAM 登上 Nature", x: "Microsoft Research 与 Ninja Theory 以《Bleeding Edge》数据训练玩法构思模型。" },
+    { d: "2025-02", k: "i", t: "《使命召唤：黑色行动 6》披露 AI 资产", x: "Activision 依 Steam 规则声明使用生成式 AI 制作部分游戏内资产。" },
+    { d: "2025-03", k: "i", t: "Roblox 开源 Cube 3D", x: "发布面向 3D 智能的基础模型路线，首个版本生成网格资产。" },
+    { d: "2025-05", k: "p", t: "SAG-AFTRA 就 AI 达斯·维达语音提起申诉", x: "针对《堡垒之夜》中 AI 生成角色语音，向 Epic 子公司提出不当劳动行为指控。" },
+    { d: "2025-06", k: "r", t: "Matrix-Game 与 Hunyuan-GameCraft", x: "中国团队密集开源交互式游戏世界模型，数据规模达千小时级。" },
+    { d: "2025-07", k: "p", t: "游戏配音罢工结束", x: "SAG-AFTRA 新协议以 95.04% 通过，确立数字复制品的同意与披露要求。" },
+    { d: "2025-08", k: "r", t: "Genie 3", x: "720p、24 fps 实时交互，一致性维持数分钟，支持“可提示的世界事件”。" },
+    { d: "2025-08", k: "r", t: "Matrix-Game 2.0 开源", x: "少步自回归扩散实现实时流式世界生成。" },
+    { d: "2025-09", k: "i", t: "EA 550 亿美元私有化", x: "据《金融时报》报道，新股东计划在全公司引入 AI 以压缩运营成本。" },
+    { d: "2025-11", k: "i", t: "World Labs 发布 Marble", x: "多模态世界模型面向所有用户开放，可导出高斯泼溅、网格或视频。" },
+    { d: "2025-11", k: "r", t: "Hunyuan-GameCraft-2", x: "从固定键鼠动作走向自然语言指令驱动的游戏世界交互。" },
+    { d: "2025-12", k: "i", t: "《光与影：33 号远征队》被撤销独立游戏奖", x: "因首发版本含生成式 AI 占位纹理，Indie Game Awards 收回两项奖项。" },
+    { d: "2026-01", k: "i", t: "Project Genie 上线", x: "1 月 29 日向美国 Google AI Ultra 订阅者开放，单次探索限 60 秒；多家游戏公司股价随之下跌。" },
+    { d: "2026-01", k: "i", t: "GDC 行业报告：52% 认为负面", x: "认为生成式 AI 对行业有负面影响的比例从 2024 年 18% 升至 52%。" },
+    { d: "2026-02", k: "i", t: "World Labs 融资 10 亿美元", x: "世界模型赛道资本集中：AMI 亦融资 10.3 亿美元，General Intuition 种子轮 1.337 亿美元。" },
+    { d: "2026-03", k: "r", t: "AutoUE", x: "多智能体在 Unreal Engine 中端到端生成 3D 游戏，含自动试玩评测。" },
+    { d: "2026-04", k: "r", t: "Matrix-Game 3.0", x: "720p 实时长时记忆世界模型，数据引擎融合 UE 合成、AAA 游戏采集与真实视频。" },
+    { d: "2026-04", k: "i", t: "Xbox 品牌重塑", x: "新领导层公开表态不以生成式 AI 用于游戏开发，并暂停主机与移动端 Copilot。" },
+    { d: "2026-04", k: "i", t: "阿里发布 Happy Oyster", x: "实时世界模型，含“导演”与“漫游”两种模式，可生成 3 分钟世界片段。" },
+    { d: "2026-05", k: "r", t: "GameGen-Verifier 与 Mage", x: "为 LLM 生成的游戏建立可验证评测：状态注入验证、四轴评测超越“编译通过率”。" },
+    { d: "2026-06", k: "i", t: "NVIDIA Cosmos 3 开放权重", x: "统一物理推理、世界模拟与动作生成的多模态世界模型家族。" },
+    { d: "2026-07", k: "r", t: "从像素回到状态", x: "《From Pixels to States》与 StatePlay 主张世界模型必须显式建模游戏状态与机制。" },
+    { d: "2026-08", k: "r", t: "Matrix-Game 3.5 与“游戏开发即数据引擎”", x: "几何感知 Patch Memory；另有工作提出以引擎可验证性为世界模型提供奖励信号。" },
+    { d: "2026-09", k: "r", t: "GameDirector", x: "把玩法逻辑与渲染解耦，让玩家可配置的游戏世界模型兼顾机制正确与生成自由。" }
+  ],
+
+  /* 2026 研究前沿 */
+  frontiers: [
+    { h: "从像素回到状态", en: "State-aware world models", p: ["From Pixels to States (2607.14076)", "StatePlay (2607.26754)", "GameDirector (2609.25652)", "WorldMind (2608.21439)"],
+      x: "纯像素世界模型能“看起来像游戏”，却守不住血量、技能、胜负等规则。2026 年的共识是把显式游戏状态重新请回循环：模型同时预测画面与状态，或让引擎负责规则、生成模型负责渲染。" },
+    { h: "长时记忆与几何一致", en: "Memory & long horizon", p: ["WorldMem (2504.12369)", "Matrix-Game 3.0 (2604.08995)", "Matrix-Game 3.5 (2608.29910)", "StableWorld (2601.15281)"],
+      x: "一致性从 Genie 2 的 10–20 秒走到数分钟，关键在记忆：检索历史帧、显式 3D patch 记忆与相机投影条件，让“转身回来世界还在”。" },
+    { h: "可验证的游戏生成", en: "Verification beyond compile-pass", p: ["GameGen-Verifier (2605.07442)", "Mage (2605.07342)", "V-GameGym (2509.20136)", "CreativeGame (2604.19926)"],
+      x: "Mage 在 858 次生成中发现：直接 NL→C# 的运行通过率最高（均值 43%），但机制 F1 仅约 0.12。评测正从“能跑”转向“机制对不对、好不好玩”。" },
+    { h: "引擎原生的智能体管线", en: "Engine-native agents", p: ["AutoUE (2603.07106)", "MAGIC (2607.11594)", "ScriptDoctor (2506.06524)", "Real-Time World Crafting (2510.16952)"],
+      x: "LLM 不再直接吐出成品，而是在 Unreal、Unity、PuzzleScript 等引擎里调用工具、写蓝图、跑自动试玩；DSL / ECS 等受约束中间层成为安全接入玩家侧的主流模式。" },
+    { h: "搜索生成器，而非搜索内容", en: "Program search & open-endedness", p: ["PCG Metageneration + CAD (2608.17947)", "Mortar (2601.00105)", "GAVEL (2407.09388)"],
+      x: "LLM 作为变异算子，与质量多样性搜索结合：进化的对象从单个关卡上移到“生成器程序”和“游戏机制”，并能自动沉淀可复用的抽象库。" },
+    { h: "游戏开发作为世界模型的奖励环境", en: "Games as verifiable data engines", p: ["Agentic Game Dev as Data Engine (2608.25518)", "Matrix-Game 3.0 数据引擎"],
+      x: "代码之所以能被 RL 后训练，是因为编译器提供可靠奖励。游戏引擎能检查碰撞、物理、可达性与可玩性，正被当作空间/世界模型缺失的那块“可验证奖励”。" }
+  ],
+
+  findings: [
+    { n: "1 → 24 fps", h: "“模型即引擎”在 30 个月内从论文走到消费级原型",
+      x: "Genie（2024-02，1 fps，2D）→ GameNGen（20 fps 跑《DOOM》）→ Genie 3（720p、24 fps、数分钟一致）→ Project Genie（2026-01 向订阅用户开放）。神经世界模型成为生成式游戏设计中增长最快、引用最集中的方向。" },
+    { n: "192 vs 829", h: "学术影响力的重心，从 LLM-PCG 转向世界模型与 3D 基座",
+      x: "2024–2026 年引用最高的相关工作是 TRELLIS（907）、Cosmos（865）与 Genie（829）。纯 LLM 驱动的 PCG 论文引用多在数十量级，领域综述《LLMs and Games》为 192。视觉生成社区正在定义“生成式游戏”的议程。" },
+    { n: "43% / F1 0.12", h: "2026 年的关键词是“可验证”",
+      x: "能跑不等于对。新一代工作把显式状态、引擎校验和自动试玩放回生成循环：StatePlay、GameDirector 解耦规则与渲染，GameGen-Verifier 与 Mage 重建评测体系。" },
+    { n: "6+ 开源系列", h: "中国团队主导开源交互世界模型",
+      x: "Matrix-Game 1.0→3.5（Skywork）、Hunyuan-GameCraft 1/2、HunyuanWorld 与 Yan（腾讯）、Happy Oyster（阿里）等持续开源或发布，数据引擎普遍结合 UE 合成与 AAA 游戏采集。" },
+    { n: "52% · 52%", h: "产业侧：采用在上升，认同在下降",
+      x: "GDC 2026 调查中 52% 的受访者所在公司使用生成式 AI，而认为其对行业有负面影响的比例也达 52%（2024 年为 18%）。真正用于程序化生成的仅 10%，用于面向玩家功能的仅 5%。" },
+    { n: "$1B+", h: "资本押注世界模型，玩家端的“AI 披露”成为声誉变量",
+      x: "World Labs 与 AMI 各自完成约 10 亿美元融资；与此同时，《光与影：33 号远征队》因 AI 占位纹理被撤奖，ARC Raiders 回炉重录 AI 语音，Xbox 公开与生成式 AI 保持距离。" }
+  ],
+
+  recs: [
+    { who: "游戏工作室", items: [
+      "把 LLM 放在“设计中间层”：让它产出结构化 IR、DSL、蓝图或参数，而不是直接产出面向玩家的最终资产。",
+      "先在不可见环节落地：原型、关卡草案、自动试玩与数值模拟（LLM 驱动的 MMO 玩家仿真已有实证）。",
+      "建立可验证回路：运行时状态注入、机制断言与自动化试玩，替代“能编译就算过”。",
+      "把披露当作产品设计的一部分：Steam 已要求披露，玩家与评奖机构对未披露的 AI 内容零容忍。"
+    ]},
+    { who: "研究者", items: [
+      "评测超越 FVD 与编译通过率：机制一致性、可玩性、长时一致与玩家体验需要同时度量。",
+      "混合架构是主线：显式状态 / 规则引擎 + 生成式渲染与内容长尾。",
+      "把游戏引擎当作可验证奖励环境，为空间与世界模型的 RL 后训练提供信号。",
+      "重视数据治理：训练数据来源、授权与能耗是从业者反对的首要原因。"
+    ]},
+    { who: "平台与工具方", items: [
+      "UGC 平台是最早的规模化场景：Roblox Cube、Project Genie 类“提示即世界”降低了创作门槛。",
+      "为创作者提供“可控性旋钮”：种子、约束、局部重生成与版本谱系，比一次性生成更有价值。",
+      "世界模型的推理成本仍是瓶颈：Project Genie 以 60 秒限制控制算力，实时化与端侧化是竞争焦点。"
+    ]}
+  ],
+
+  sources: [
+    ["Semantic Scholar Graph API（论文元数据与引用数，2026-09-27 检索）", "https://api.semanticscholar.org"],
+    ["arXiv API（2025–2026 新论文检索与摘要）", "https://arxiv.org"],
+    ["GDC, 2026 State of the Game Industry（2026-01，n>2,300，±3% MoE）", "https://gdconf.com/article/gdc-2026-state-of-the-game-industry-reveals-impact-of-layoffs-generative-ai-and-more/"],
+    ["Google DeepMind, Genie 3: A new frontier for world models（2025-08）", "https://deepmind.google/discover/blog/genie-3-a-new-frontier-for-world-models/"],
+    ["Google, Project Genie（2026-01-29）", "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/project-genie/"],
+    ["World Labs, Marble: A Multimodal World Model", "https://www.worldlabs.ai/blog/marble-world-model"],
+    ["Decart / Etched, Oasis", "https://oasis-model.github.io/"],
+    ["Kanervisto et al., World and Human Action Models towards gameplay ideation, Nature (2025)", "https://doi.org/10.1038/s41586-025-08600-3"],
+    ["Wikipedia：Genie (world model)、World model (AI)、Decart、Steam、SAG-AFTRA video game strike、AI slop 等条目", "https://en.wikipedia.org"]
+  ]
+};
+</script>
+<script>
+(function(){
+const G=window.GP, $=s=>document.querySelector(s), NS="http://www.w3.org/2000/svg";
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const el=(tag,attrs={},parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e};
+const h=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tc=k=>`var(--t${k})`;
+
+/* ---------- tooltip ---------- */
+const tip=$("#tip");
+function showTip(html,ev){tip.innerHTML=html;tip.classList.add("on");moveTip(ev)}
+function moveTip(ev){const w=tip.offsetWidth,hh=tip.offsetHeight;let x=ev.clientX+14,y=ev.clientY+14;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+hh>innerHeight-8)y=ev.clientY-hh-14;tip.style.left=x+"px";tip.style.top=y+"px"}
+function hideTip(){tip.classList.remove("on")}
+
+/* ---------- rail + progress ---------- */
+const secs=[...document.querySelectorAll("main section")];
+const rail=$("#railList");
+secs.forEach((s,i)=>{const li=h("li");li.innerHTML=`<a href="#${s.id}"><span class="n">${String(i+1).padStart(2,"0")}</span>${s.dataset.title}</a>`;rail.appendChild(li)});
+const links=[...rail.querySelectorAll("a")];
+const bar=$("#progress i");
+function onScroll(){const d=document.documentElement;const p=d.scrollTop/(d.scrollHeight-d.clientHeight||1);bar.style.transform=`scaleX(${p})`;
+  let cur=-1;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*.35)cur=i});links.forEach((a,i)=>a.classList.toggle("on",i===cur))}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+/* ---------- reveal (only arms off-screen items) ---------- */
+function armReveal(root=document){
+  if(reduce||!("IntersectionObserver"in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("arm");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"});
+  root.querySelectorAll(".rv").forEach(n=>{if(n.getBoundingClientRect().top>innerHeight){n.classList.add("arm");io.observe(n)}});
+}
+
+/* ---------- HERO: procedural map, generate → verify ---------- */
+const cv=$("#map"),cx=cv.getContext("2d"),W=48,H=32,S=10;
+const BIOMES=[
+  {name:"温带群岛",sea:.47,c:["#18306e","#2b4fb8","#d9b36a","#4f9e62","#2a6f4b","#6b7478","#e9ece8"],moist:0},
+  {name:"被潮汐淹没的神殿",sea:.58,c:["#10245a","#2447a8","#c9a55c","#3f8f78","#1f5f52","#5b6770","#d8dee0"],moist:.1},
+  {name:"沙海遗迹",sea:.28,c:["#1c3570","#2f5fb3","#e6c27a","#d39a4a","#9f6a32","#7a6250","#f0e2c4"],moist:-.3},
+  {name:"冰原与火山",sea:.40,c:["#16305f","#3a64b0","#9fb4c4","#c9d6de","#6d7f8c","#3b3336","#c7492f"],moist:0}
+];
+let biome=0,seed=0x7E3A,grid=[],pois=[],path=[],tries=0,anim=0;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function noiseField(r,scale){const gw=Math.ceil(W/scale)+2,gh=Math.ceil(H/scale)+2,g=[];for(let i=0;i<gw*gh;i++)g.push(r());
+  const sm=t=>t*t*(3-2*t);return(x,y)=>{const fx=x/scale,fy=y/scale,x0=Math.floor(fx),y0=Math.floor(fy),tx=sm(fx-x0),ty=sm(fy-y0);const v=(i,j)=>g[j*gw+i];
+  return (v(x0,y0)*(1-tx)+v(x0+1,y0)*tx)*(1-ty)+(v(x0,y0+1)*(1-tx)+v(x0+1,y0+1)*tx)*ty}}
+function generate(sd){const r=rng(sd),n1=noiseField(r,9),n2=noiseField(r,4),n3=noiseField(r,2),m=noiseField(r,7),B=BIOMES[biome];grid=[];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const dx=(x-W/2)/(W/2),dy=(y-H/2)/(H/2);let e=n1(x,y)*.62+n2(x,y)*.28+n3(x,y)*.1;e=e-.34*(dx*dx+dy*dy)+.1;const mo=m(x,y)+B.moist;
+    let t;if(e<B.sea-.1)t=0;else if(e<B.sea)t=1;else if(e<B.sea+.04)t=2;else if(e<B.sea+.19)t=mo>.5?4:3;else if(e<B.sea+.33)t=5;else t=6;
+    if(biome===3&&t===6&&r()<.5)t=6;grid.push(t)}
+  // place POIs on land
+  pois=[];let guard=0;while(pois.length<3&&guard++<400){const x=2+Math.floor(r()*(W-4)),y=2+Math.floor(r()*(H-4)),t=grid[y*W+x];if(t>=2&&t<=4&&pois.every(p=>Math.abs(p.x-x)+Math.abs(p.y-y)>14))pois.push({x,y})}}
+function bfs(a,b){const walk=t=>t>=2&&t<=5,prev=new Int32Array(W*H).fill(-1),q=[a.y*W+a.x];prev[q[0]]=q[0];
+  while(q.length){const c=q.shift();if(c===b.y*W+b.x)break;const x=c%W,y=(c/W)|0;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const ni=ny*W+nx;if(prev[ni]<0&&walk(grid[ni])){prev[ni]=c;q.push(ni)}}}
+  const end=b.y*W+b.x;if(prev[end]<0)return null;const p=[];let c=end;while(c!==prev[c]){p.push(c);c=prev[c]}p.push(c);return p.reverse()}
+function verify(){if(pois.length<3)return false;const p1=bfs(pois[0],pois[1]),p2=bfs(pois[1],pois[2]);if(!p1||!p2)return false;path=p1.concat(p2);return true}
+function draw(progress=1){const B=BIOMES[biome];cx.clearRect(0,0,cv.width,cv.height);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const d=(x+y)/(W+H);if(d>progress)continue;const t=grid[y*W+x];cx.fillStyle=B.c[t];cx.fillRect(x*S,y*S,S,S);
+    if(t===4&&((x*7+y*3)%4===0)){cx.fillStyle="rgba(0,0,0,.18)";cx.fillRect(x*S+3,y*S+3,4,4)}
+    if(t===5&&((x*5+y*11)%5===0)){cx.fillStyle="rgba(255,255,255,.14)";cx.fillRect(x*S+2,y*S+2,6,2)}}
+  cx.strokeStyle="rgba(255,255,255,.035)";cx.lineWidth=1;for(let x=0;x<=W;x++){cx.beginPath();cx.moveTo(x*S+.5,0);cx.lineTo(x*S+.5,H*S);cx.stroke()}for(let y=0;y<=H;y++){cx.beginPath();cx.moveTo(0,y*S+.5);cx.lineTo(W*S,y*S+.5);cx.stroke()}
+  if(progress>=1){const pk=Math.min(path.length,Math.floor(path.length*pathP));cx.fillStyle="#fff";for(let i=0;i<pk;i+=2){const c=path[i];cx.globalAlpha=.85;cx.fillRect((c%W)*S+4,((c/W)|0)*S+4,2,2)}cx.globalAlpha=1;
+    pois.forEach((p,i)=>{cx.fillStyle="#0d1316";cx.fillRect(p.x*S-3,p.y*S-3,S+6,S+6);cx.fillStyle=["#f4f1e8","#ffcf5a","#ff7a59"][i];cx.fillRect(p.x*S-1,p.y*S-1,S+2,S+2);cx.fillStyle="#0d1316";cx.font="600 9px IBM Plex Mono, monospace";cx.fillText(["S","K","B"][i],p.x*S+2,p.y*S+8)})}}
+let pathP=1;
+function run(newSeed){cancelAnimationFrame(anim);tries=0;let sd=newSeed;
+  do{generate(sd);tries++;if(verify())break;sd=(sd*1103515245+12345)>>>0&0xFFFF}while(tries<40);seed=sd;
+  $("#seedOut").textContent="0x"+seed.toString(16).toUpperCase().padStart(4,"0");$("#biomeOut").textContent=BIOMES[biome].name;
+  const ok=path.length>0;$("#vpStatus").innerHTML=`<span>尝试 ${tries} 次</span><span class="${ok?"ok":"bad"}">${ok?"✓ 可达性通过":"✗ 未通过"}</span><span>路径 ${path.length} 格</span><span>起点 S → 钥匙 K → Boss B</span>`;
+  if(reduce){pathP=1;draw(1);return}
+  const t0=performance.now();pathP=0;
+  const step=now=>{const k=Math.min(1,(now-t0)/700);if(k<1){draw(k*1.02);anim=requestAnimationFrame(step)}else{const k2=Math.min(1,(now-t0-700)/600);pathP=Math.max(0,k2);draw(1);if(k2<1)anim=requestAnimationFrame(step)}};anim=requestAnimationFrame(step)}
+$("#regen").addEventListener("click",()=>run((Math.random()*0xFFFF)|0));
+document.querySelectorAll(".prompts button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".prompts button").forEach(x=>x.setAttribute("aria-pressed",x===b));biome=+b.dataset.b;run([0x7E3A,0x1D05,0x5A11,0x2C77][biome])}));
+const TN=["深海","浅水","沙滩","平原","森林","岩地","雪 / 熔岩"],hi=$("#hoverinfo");
+cv.addEventListener("mousemove",e=>{const r=cv.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)/r.width*W),y=Math.floor((e.clientY-r.top)/r.height*H);if(x<0||y<0||x>=W||y>=H)return;hi.textContent=`(${x},${y}) ${TN[grid[y*W+x]]}`;hi.style.opacity=1});
+cv.addEventListener("mouseleave",()=>hi.style.opacity=0);
+run(seed);
+
+/* ---------- findings ---------- */
+G.findings.forEach((f,i)=>{const d=h("article","finding rv",`<div class="num">${esc(f.n)}<span>${String(i+1).padStart(2,"0")}</span></div><h3>${esc(f.h)}</h3><p>${esc(f.x)}</p>`);$("#findings").appendChild(d)});
+
+/* ---------- tracks + flow ---------- */
+const counts={};G.papers.forEach(p=>counts[p.k]=(counts[p.k]||0)+1);
+const examples={W:"Genie · GameNGen · Matrix-Game · Genie 3",S:"WonderWorld · SceneCraft · Word2World · MAGIC",R:"GAVEL · ScriptDoctor · AutoUE · GameGen-Verifier",F:"TRELLIS · Hunyuan3D · SIMA · BALROG"};
+let activeTrack=null;
+Object.entries(G.tracks).forEach(([k,t])=>{const b=h("button","track rv");b.type="button";b.style.setProperty("--c",tc(k));b.setAttribute("aria-pressed","false");b.dataset.k=k;
+  b.innerHTML=`<span class="sw"></span><div><h3>${t.name}</h3><div class="en">${t.en}</div><p>${t.desc}</p></div><span class="cnt">${counts[k]||0} 篇</span><div class="ex">${examples[k]}</div>`;
+  b.addEventListener("click",()=>{activeTrack=activeTrack===k?null:k;document.querySelectorAll(".track").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===activeTrack));paintFlow()});
+  b.addEventListener("mouseenter",()=>{if(!activeTrack)paintFlow(k)});b.addEventListener("mouseleave",()=>{if(!activeTrack)paintFlow()});
+  $("#tracks").appendChild(b)});
+const fs=$("#flow");
+function node(x,y,w,hh,label,sub,k){const g=el("g",{class:"fl-node"+(k?" t":"") },fs);if(k){g.style.setProperty("--c",tc(k));g.dataset.k=k}
+  el("rect",{x,y,width:w,height:hh,rx:9},g);const t=el("text",{x:x+14,y:y+(sub?24:hh/2+5)},g);t.textContent=label;if(sub){const s=el("text",{x:x+14,y:y+42,class:"sub"},g);s.textContent=sub}return g}
+function edge(d,k){const p=el("path",{d,class:"fl-edge"+(k?" t":""),"marker-end":"url(#ah)"},fs);if(k){p.style.setProperty("--c",tc(k));p.dataset.k=k}return p}
+const defs=el("defs",{},fs),mk=el("marker",{id:"ah",viewBox:"0 0 8 8",refX:"7",refY:"4",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"},defs);el("path",{d:"M0,0 L8,4 L0,8 z",fill:"var(--muted)"},mk);
+node(8,160,120,60,"设计意图","prompt · 草图");
+node(166,160,132,60,"LLM 规划层","IR · DSL · 工具调用");
+node(346,14,176,56,"规则与代码合成","VGDL · Ludii · C# · 蓝图","R");
+node(346,100,176,56,"内容与场景生成","关卡 · 叙事 · 3D 场景","S");
+node(346,186,176,56,"资产基座","TRELLIS · Hunyuan3D","F");
+node(346,272,176,56,"神经世界模型","动作 → 下一帧","W");
+node(572,160,112,60,"引擎 / 试玩","校验 · 可达性");
+node(572,300,112,56,"玩家","体验 · 反馈");
+edge("M128,190 L162,190");
+[["R",42],["S",128],["F",214],["W",300]].forEach(([k,y])=>{edge(`M298,190 C322,190 322,${y} 342,${y}`,k);edge(`M522,${y} C548,${y} 548,190 568,190`,k)});
+edge("M628,220 L628,296");
+el("path",{d:"M600,220 C600,380 232,380 232,224",class:"fl-loop","marker-end":"url(#ah)"},fs);
+const lt=el("text",{x:416,y:372,"text-anchor":"middle",class:"lbl-2"},fs);lt.textContent="验证结果回灌 · generate → verify → repair";
+function paintFlow(k=activeTrack){fs.classList.toggle("dim",!!k);fs.querySelectorAll(".t").forEach(n=>n.classList.toggle("on",n.dataset.k===k))}
+
+/* ---------- FPS chart (single series) ---------- */
+(function(){const data=G.worldspecs.filter(d=>d.fps),box=$("#fpsChart");const w=520,rowH=40,top=10,left=108,right=40,hh=top+data.length*rowH+30;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"世界模型实时帧率条形图"},box);const x=v=>left+(w-left-right)*v/24;
+  const g=el("g",{class:"grid"},svg);[0,6,12,18,24].forEach(v=>{el("line",{x1:x(v),x2:x(v),y1:top-4,y2:top+data.length*rowH},g);const t=el("text",{x:x(v),y:hh-8,"text-anchor":"middle",class:"lbl-2"},svg);t.textContent=v});
+  data.forEach((d,i)=>{const y=top+i*rowH,gr=el("g",{class:"row"},svg);el("rect",{x:0,y:y,width:w,height:rowH,class:"row-bg",rx:6},gr);
+    const l=el("text",{x:0,y:y+18,class:"lbl"},gr);l.textContent=d.m;const l2=el("text",{x:0,y:y+32,class:"lbl-2"},gr);l2.textContent=d.d;
+    const bw=x(d.fps)-left;const b=el("path",{d:roundBar(left,y+14,bw,12),fill:d.m.startsWith("Genie")?"var(--tW)":"var(--neutral-bar)",class:"bar"},gr);b.style.transformOrigin=`${left}px 0`;
+    const v=el("text",{x:left+bw+8,y:y+24,class:"val"},gr);v.textContent=d.fps+" fps";
+    el("rect",{x:0,y:y,width:w,height:rowH,class:"row-hit"},gr);
+    gr.addEventListener("mousemove",e=>showTip(`<b>${d.m}</b> · ${d.org}<br>${d.fps} fps · ${d.res}<br><span class="m">${d.note}</span>`,e));gr.addEventListener("mouseleave",hideTip);growOnView(b)});
+  const cap=h("div","",`<span style="font-size:12.5px;color:var(--muted)">蓝色为 Google DeepMind Genie 系列；灰色为其他团队。GameNGen 与 Genie 3 之间的差距不只在帧率，更在分辨率与一致时长。</span>`);box.appendChild(cap)})();
+function roundBar(x,y,w,hh){const r=Math.min(4,w/2);return `M${x},${y} H${x+w-r} Q${x+w},${y} ${x+w},${y+r} V${y+hh-r} Q${x+w},${y+hh} ${x+w-r},${y+hh} H${x} Z`}
+function growOnView(b){if(reduce||!("IntersectionObserver"in window))return;if(b.getBoundingClientRect().top<innerHeight)return;b.style.transform="scaleX(0)";const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){b.style.transform="scaleX(1)";io.disconnect()}}),{rootMargin:"0px 0px -10% 0px"});io.observe(b)}
+
+/* spec table */
+$("#specTable").innerHTML=`<thead><tr><th>模型</th><th>时间</th><th>分辨率</th><th>帧率</th><th>一致时长</th></tr></thead><tbody>${G.worldspecs.map(d=>`<tr><td><b>${d.m}</b><br><span style="font-size:12px;color:var(--muted)">${d.org}</span></td><td class="m">${d.d}</td><td class="m">${d.res}</td><td class="m">${d.fps?d.fps+" fps":"实时 · 未公开"}</td><td>${d.horizon}</td></tr>`).join("")}</tbody>`;
+
+/* ---------- papers chart ---------- */
+let pf="all";const filt=$("#paperFilters");
+[["all","全部",null],...Object.entries(G.tracks).map(([k,t])=>[k,t.name,k])].forEach(([k,label,c])=>{const b=h("button","chip",`${c?"<i></i>":""}${label}`);b.type="button";if(c)b.style.setProperty("--c",tc(c));b.setAttribute("aria-pressed",k===pf);
+  b.addEventListener("click",()=>{pf=k;filt.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));drawPapers()});filt.appendChild(b)});
+filt.appendChild(h("span","note","单位：引用数"));
+let selected=G.papers[2].id,touched=false;
+function drawPapers(){const box=$("#paperChart");box.innerHTML="";const data=G.papers.filter(p=>pf==="all"||p.k===pf).sort((a,b)=>b.c-a.c);
+  const w=900,rowH=26,top=6,left=176,right=64,hh=top+data.length*rowH+28,max=1000;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"论文引用数条形图"},box);const x=v=>left+(w-left-right)*v/max;
+  const g=el("g",{class:"grid"},svg);[0,250,500,750,1000].forEach(v=>{el("line",{x1:x(v),x2:x(v),y1:top,y2:top+data.length*rowH},g);const t=el("text",{x:x(v),y:hh-8,"text-anchor":"middle",class:"lbl-2"},svg);t.textContent=v});
+  data.forEach((p,i)=>{const y=top+i*rowH,gr=el("g",{class:"row"},svg);el("rect",{x:0,y,width:w,height:rowH,class:"row-bg",rx:5},gr);
+    const l=el("text",{x:left-12,y:y+17,"text-anchor":"end",class:"lbl"},gr);l.textContent=p.s;if(p.id===selected){l.setAttribute("font-weight","700")}
+    const bw=Math.max(2,x(p.c)-left);const b=el("path",{d:roundBar(left,y+8,bw,10),fill:tc(p.k),class:"bar"},gr);b.style.transformOrigin=`${left}px 0`;if(touched&&p.id!==selected)b.style.opacity=.6;
+    const v=el("text",{x:left+bw+8,y:y+17,class:"val"},gr);v.textContent=p.c+(p.adj?"  · 相邻":"");
+    el("rect",{x:0,y,width:w,height:rowH,class:"row-hit"},gr);
+    gr.addEventListener("mousemove",e=>showTip(`<b>${esc(p.s)}</b> · ${p.c} 次引用<br><span class="m">${esc(p.a)} · ${esc(p.v)} · ${p.y}</span>`,e));gr.addEventListener("mouseleave",hideTip);
+    gr.addEventListener("click",()=>{selected=p.id;touched=true;drawPapers();showDetail(p)});growOnView(b)});
+  const cur=G.papers.find(p=>p.id===selected);if(cur)showDetail(cur)}
+function showDetail(p){const link=p.id.includes(".")?`https://arxiv.org/abs/${p.id}`:`https://doi.org/10.1038/${p.id}`;
+  $("#paperDetail").innerHTML=`<span class="tag" style="box-shadow:inset 3px 0 0 ${tc(p.k)}">${G.tracks[p.k].name}</span><div><h4>${esc(p.t)}</h4></div><div class="c">${p.c}<small>引用 · S2</small></div><span></span><div class="by">${esc(p.a)} · ${esc(p.org)} · ${esc(p.v)} · <a href="${link}" target="_blank" rel="noopener">${p.id.includes(".")?"arXiv:"+p.id:"Nature"}</a></div><span></span><span></span><p>${esc(p.n)}<br><button class="copy" type="button" id="copyCite">复制引用</button></p>`;
+  $("#copyCite").addEventListener("click",e=>{const txt=`${p.a} (${p.y}). ${p.t}. ${p.v}. ${link}`;const btn=e.currentTarget;
+    const done=()=>{btn.textContent="已复制";setTimeout(()=>btn.textContent="复制引用",1600)};
+    try{navigator.clipboard.writeText(txt).then(done,()=>{sel(btn,txt)})}catch(_){sel(btn,txt)}})}
+function sel(btn,txt){const s=document.createElement("span");s.textContent=" "+txt;s.style.fontSize="12px";btn.after(s);const r=document.createRange();r.selectNodeContents(s);const g=getSelection();g.removeAllRanges();g.addRange(r);btn.textContent="已选中，按 Ctrl+C"}
+drawPapers();
+G.foundations.forEach(f=>$("#found").appendChild(h("div","rv",`<b>${esc(f.s)}</b><span class="m">${esc(f.a)} · ${esc(f.v)} · ${f.c.toLocaleString()} 引用</span><span>${esc(f.n)}</span>`)));
+
+/* ---------- timeline ---------- */
+const KN={r:"研究",i:"产业",p:"政策与劳工"};let tk="all";const tf=$("#tlFilters");
+[["all","全部"],["r","研究"],["i","产业"],["p","政策与劳工"]].forEach(([k,l])=>{const b=h("button","chip",(k!=="all"?`<i style="border-radius:${k==="p"?"2px":"50%"}"></i>`:"")+l);b.type="button";if(k!=="all")b.style.setProperty("--c",tc({r:"W",i:"S",p:"R"}[k]));b.setAttribute("aria-pressed",k===tk);
+  b.addEventListener("click",()=>{tk=k;tf.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));document.querySelectorAll(".tl-item").forEach(it=>it.hidden=!(tk==="all"||it.dataset.k===tk));document.querySelectorAll(".tl-year").forEach(y=>{const n=[...y.querySelectorAll(".tl-item")].filter(i=>!i.hidden).length;y.querySelector(".cnt").textContent=n+" 条"})});tf.appendChild(b)});
+const years={};G.timeline.forEach(e=>{(years[e.d.slice(0,4)]=years[e.d.slice(0,4)]||[]).push(e)});
+const yrLede={"2024":"证明可行","2025":"走向实时","2026":"开始验证"};
+Object.entries(years).forEach(([y,list])=>{const blk=h("div","tl-year");blk.innerHTML=`<div class="yr">${y}<small>${yrLede[y]} · <span class="cnt">${list.length} 条</span></small></div>`;const ul=h("ul","tl-list");
+  list.forEach(e=>{const li=h("li","tl-item rv");li.dataset.k=e.k;li.innerHTML=`<div class="d">${e.d}</div><span class="k" title="${KN[e.k]}"></span><div><h4>${esc(e.t)}</h4><p>${esc(e.x)}</p></div>`;ul.appendChild(li)});blk.appendChild(ul);$("#timeline").appendChild(blk)});
+
+/* ---------- sentiment slope chart ---------- */
+(function(){const S=G.sentiment,box=$("#sentChart"),w=480,hh=300,l=40,r=96,t=16,b=34;const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"对生成式AI影响看法的折线图"},box);
+  const x=i=>l+(w-l-r)*i/2,y=v=>t+(hh-t-b)*(1-v/60);const g=el("g",{class:"grid"},svg);[0,20,40,60].forEach(v=>{el("line",{x1:l,x2:w-r+10,y1:y(v),y2:y(v)},g);const tx=el("text",{x:l-8,y:y(v)+4,"text-anchor":"end",class:"lbl-2"},svg);tx.textContent=v+"%"});
+  S.years.forEach((yr,i)=>{const tx=el("text",{x:x(i),y:hh-10,"text-anchor":"middle",class:"lbl-2"},svg);tx.textContent=yr});
+  const series=[{k:"negative",name:"负面",c:"var(--tS)"},{k:"positive",name:"正面",c:"var(--tW)"}];
+  series.forEach(s=>{const pts=S[s.k].map((v,i)=>[x(i),y(v)]);el("path",{d:"M"+pts.map(p=>p.join(",")).join(" L"),fill:"none",stroke:s.c,"stroke-width":2,"stroke-linejoin":"round"},svg);
+    pts.forEach((p,i)=>el("circle",{cx:p[0],cy:p[1],r:4.5,fill:s.c,stroke:"var(--surface)","stroke-width":2},svg));
+    const last=pts[2],tx=el("text",{x:last[0]+12,y:last[1]+4,class:"lbl"},svg);tx.textContent=`${s.name} ${S[s.k][2]}%`});
+  const cross=el("line",{y1:t,y2:hh-b,stroke:"var(--ink-2)","stroke-width":1,"stroke-dasharray":"3 3",opacity:0},svg);
+  S.years.forEach((yr,i)=>{const hit=el("rect",{x:x(i)-40,y:t,width:80,height:hh-t-b,fill:"transparent"},svg);
+    hit.addEventListener("mousemove",e=>{cross.setAttribute("x1",x(i));cross.setAttribute("x2",x(i));cross.setAttribute("opacity",1);showTip(`<b>${yr}</b><br>负面 ${S.negative[i]}% · 正面 ${S.positive[i]}%${i===1?`<br><span class="m">“好坏参半” ${S.mixed2025}%</span>`:i===2?`<br><span class="m">“好坏参半” ${S.mixed2026}%</span>`:""}`,e)});
+    hit.addEventListener("mouseleave",()=>{cross.setAttribute("opacity",0);hideTip()})});
+  box.appendChild(h("div","legend",`<span><i class="f" style="--c:var(--tS)"></i>认为负面</span><span><i class="f" style="--c:var(--tW)"></i>认为正面</span><span style="color:var(--muted)">“好坏参半”从 51%（2025）降至 30%（2026）</span>`))})();
+
+/* ---------- use-case bars ---------- */
+(function(){const d=G.usecases,box=$("#useChart"),w=480,rowH=30,l=150,r=44,t=4;const hh=t+d.length*rowH+24;const svg=el("svg",{viewBox:`0 0 ${w} ${hh}`,role:"img","aria-label":"生成式AI用途条形图"},box);const x=v=>l+(w-l-r)*v/100;
+  const g=el("g",{class:"grid"},svg);[0,25,50,75,100].forEach(v=>{el("line",{x1:x(v),x2:x(v),y1:t,y2:t+d.length*rowH},g);const tx=el("text",{x:x(v),y:hh-6,"text-anchor":"middle",class:"lbl-2"},svg);tx.textContent=v+"%"});
+  d.forEach((u,i)=>{const y=t+i*rowH,gr=el("g",{class:"row"},svg);el("rect",{x:0,y,width:w,height:rowH,class:"row-bg",rx:5},gr);const lb=el("text",{x:l-10,y:y+19,"text-anchor":"end",class:"lbl"},gr);lb.textContent=u.k;if(u.hi)lb.setAttribute("font-weight","700");
+    const bw=x(u.v)-l;const b=el("path",{d:roundBar(l,y+9,bw,12),fill:u.hi?"var(--accent)":"var(--neutral-bar)",class:"bar"},gr);b.style.transformOrigin=`${l}px 0`;const v=el("text",{x:l+bw+8,y:y+19,class:"val"},gr);v.textContent=u.v+"%";
+    el("rect",{x:0,y,width:w,height:rowH,class:"row-hit"},gr);gr.addEventListener("mousemove",e=>showTip(`<b>${u.k}</b><br>${u.v}% 的生成式 AI 使用者`,e));gr.addEventListener("mouseleave",hideTip);growOnView(b)});
+  box.appendChild(h("div","",`<span style="font-size:12.5px;color:var(--muted)">高亮两项是本报告关心的“生成式游戏设计”本体：PCG 与面向玩家的功能。</span>`))})();
+
+/* ---------- frontiers, recs, sources ---------- */
+G.frontiers.forEach(f=>$("#front").appendChild(h("article","fr rv",`<div class="en">${esc(f.en)}</div><h3>${esc(f.h)}</h3><p>${esc(f.x)}</p><ul>${f.p.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`)));
+G.recs.forEach(r=>$("#recs").appendChild(h("div","rec rv",`<h3>${r.who}</h3><ol>${r.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ol>`)));
+G.sources.forEach(([t,u])=>$("#srcList").appendChild(h("li","",`<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`)));
+
+armReveal();
+})();
+</script>
+
+</body>
+</html>
